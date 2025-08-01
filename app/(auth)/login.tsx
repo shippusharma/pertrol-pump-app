@@ -92,6 +92,10 @@ export default function LoginScreen() {
             name="password"
           />
 
+           <Link href='/forgot-password' style={styles.forgotPassword}>
+            forgot password
+          </Link>
+
           <Button
             title="Sign In"
             onPress={handleSubmit(onSubmit)}
@@ -142,7 +146,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   loginButton: {
-    marginTop: 8,
+    marginTop: 15,
   },
   footer: {
     alignItems: 'center',
@@ -153,6 +157,12 @@ const styles = StyleSheet.create({
   },
   link: {
     color: '#2563EB',
+    fontWeight: '600',
+  },
+  forgotPassword: {
+    padding: 'auto',
+    textAlign: 'right',
+    color: '#007bff',
     fontWeight: '600',
   },
 });
