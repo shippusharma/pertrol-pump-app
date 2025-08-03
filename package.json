@@ -9,9 +9,17 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "doctor":"expo doctor",
-    "prebuild": "expo prebuild && cd android && ./gradlew assembleRelease",
-    "lint": "expo lint"
+    "doctor": "expo doctor",
+    "prebuild": "expo prebuild",
+    "lint": "expo lint",
+    "clean": "rm -rf node_modules .expo .expo-shared dist android/build ios/build && bun cache clean",
+    "reset": "expo start -c",
+    "bundle:android": "bunx expo export --platform android --output-dir android/app/src/main/assets",
+    "build:android:apk": "bun run bundle:android && cd android && ./gradlew assembleRelease",
+    "build:android:aab": "bun run bundle:android && cd android && ./gradlew bundleRelease",
+    "build:android:debug": "cd android && ./gradlew assembleDebug",
+    "clean:android": "cd android && ./gradlew clean",
+    "clean:all": "bun run clean && cd android && ./gradlew clean"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",

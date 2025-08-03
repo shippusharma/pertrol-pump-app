@@ -18,18 +18,20 @@ interface AttendanceEntry {
   location: LocationData;
 }
 
+// Geofence configuration (example coordinates)
+const OFFICE_LOCATION = {
+  latitude: 37.7749,
+  longitude: -122.4194,
+  radius: 100, // meters
+};
+
 export default function AttendanceScreen() {
   const [location, setLocation] = useState<LocationData | null>(null);
   const [isLoadingLocation, setIsLoadingLocation] = useState(false);
   const [attendanceEntries, setAttendanceEntries] = useState<AttendanceEntry[]>([]);
   const [lastAction, setLastAction] = useState<'check-in' | 'check-out' | null>(null);
 
-  // Geofence configuration (example coordinates)
-  const OFFICE_LOCATION = {
-    latitude: 37.7749,
-    longitude: -122.4194,
-    radius: 100, // meters
-  };
+
 
   useEffect(() => {
     getCurrentLocation();
