@@ -1,6 +1,6 @@
-import { LoginRequest, RegisterRequest, User, AuthTokens } from '../types/auth';
+import { DUMMY_TOKENS, DUMMY_USERS } from '../app/api/data';
+import { AuthTokens, LoginRequest, RegisterRequest, User } from '../types/auth';
 import { authStorage } from './auth-storage';
-import { DUMMY_TOKENS, DUMMY_USERS } from './data';
 
 export const authService = {
   async login(
