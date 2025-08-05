@@ -5,6 +5,7 @@ This guide will help you build Android APKs locally without using EAS Build.
 ## ✅ Prerequisites
 
 Make sure you have the following installed:
+
 - Node.js (v18 or higher)
 - Java 11 or higher
 - Android Studio with Android SDK
@@ -13,16 +14,19 @@ Make sure you have the following installed:
 ## 🚀 Quick Build Commands
 
 ### Build Release APK
+
 ```bash
 bun run build:android:apk
 ```
 
 ### Build Debug APK (for testing)
+
 ```bash
 bun run build:android:debug
 ```
 
 ### Build AAB (for Play Store)
+
 ```bash
 bun run build:android:aab
 ```
@@ -30,16 +34,19 @@ bun run build:android:aab
 ## 📦 Step-by-Step Build Process
 
 ### 1. Install Dependencies
+
 ```bash
 bun install
 ```
 
 ### 2. Bundle JavaScript and Assets
+
 ```bash
 bun run bundle:android
 ```
 
 ### 3. Build APK
+
 ```bash
 cd android
 ./gradlew assembleRelease
@@ -48,6 +55,7 @@ cd android
 ## 📍 Output Locations
 
 After successful build, you'll find your APK at:
+
 - **Release APK**: `android/app/build/outputs/apk/release/app-release.apk`
 - **Debug APK**: `android/app/build/outputs/apk/debug/app-debug.apk`
 - **AAB**: `android/app/build/outputs/bundle/release/app-release.aab`
@@ -72,6 +80,7 @@ bun run build:android:apk
 ### Common Issues:
 
 1. **"gradlew: Permission denied"**
+
    ```bash
    chmod +x android/gradlew
    ```
@@ -83,10 +92,11 @@ bun run build:android:apk
    - Set environment variable: `export ANDROID_HOME=/path/to/your/android/sdk`
 
 3. **"Java version incompatible"**
+
    ```bash
    # Check Java version
    java -version
-   
+
    # If needed, install Java 11
    # On macOS: brew install openjdk@11
    # On Ubuntu: sudo apt install openjdk-11-jdk
@@ -108,10 +118,11 @@ bun run build:android:apk
 2. **Connect your phone** via USB
 
 3. **Install the APK**:
+
    ```bash
    # For release APK
    adb install android/app/build/outputs/apk/release/app-release.apk
-   
+
    # For debug APK
    adb install android/app/build/outputs/apk/debug/app-debug.apk
    ```
@@ -121,11 +132,13 @@ bun run build:android:apk
 For production releases, you'll need to create a keystore:
 
 1. **Generate keystore**:
+
    ```bash
    keytool -genkey -v -keystore android/app/release-key.keystore -alias your-key-alias -keyalg RSA -keysize 2048 -validity 10000
    ```
 
 2. **Create `android/gradle.properties`** (if not exists):
+
    ```properties
    MYAPP_RELEASE_STORE_FILE=release-key.keystore
    MYAPP_RELEASE_KEY_ALIAS=your-key-alias
@@ -168,6 +181,7 @@ For production releases, you'll need to create a keystore:
 ## 📞 Support
 
 If you encounter issues:
+
 1. Check the troubleshooting section above
 2. Clean and rebuild: `npm run clean:all && npm run build:android:apk`
-3. Check Android Studio logs for detailed error messages 
+3. Check Android Studio logs for detailed error messages

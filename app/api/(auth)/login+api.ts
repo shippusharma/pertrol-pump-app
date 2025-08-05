@@ -3,8 +3,8 @@ import { UserModel } from '@/model/user.mode';
 
 export async function POST(req: Request, res: Response) {
   try {
-    const { email, password } = await req.json()
-    if (!email || !password ) {
+    const { email, password } = await req.json();
+    if (!email || !password) {
       return Response.json({ message: 'Invalide creadentials', success: false, status: 400 });
     }
 
@@ -15,8 +15,6 @@ export async function POST(req: Request, res: Response) {
     if (!isPasswordMatch) return Response.json({ message: 'Invalide creadentials', success: false, status: 400 });
 
     // const { accessToken, refreshToken } = await this.tokens(req, res, payload);
-
-    
 
     return Response.json({ message: 'Logged In', success: true, status: 200, payload: null });
   } catch (error) {

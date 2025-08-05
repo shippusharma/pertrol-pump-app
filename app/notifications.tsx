@@ -1,21 +1,8 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
 import { Card } from '../components/Card';
-import {
-  ArrowLeft,
-  Bell,
-  Fuel,
-  Wrench,
-  Camera,
-  Info,
-} from 'lucide-react-native';
+import { ArrowLeft, Bell, Fuel, Wrench, Camera, Info } from 'lucide-react-native';
 import { Notification } from '../types/data';
 
 export default function NotificationsScreen() {
@@ -59,17 +46,11 @@ export default function NotificationsScreen() {
   ]);
 
   const markAsRead = (notificationId: string) => {
-    setNotifications((prev) =>
-      prev.map((notif) =>
-        notif.id === notificationId ? { ...notif, isRead: true } : notif
-      )
-    );
+    setNotifications(prev => prev.map(notif => (notif.id === notificationId ? { ...notif, isRead: true } : notif)));
   };
 
   const markAllAsRead = () => {
-    setNotifications((prev) =>
-      prev.map((notif) => ({ ...notif, isRead: true }))
-    );
+    setNotifications(prev => prev.map(notif => ({ ...notif, isRead: true })));
   };
 
   const getNotificationIcon = (iconType: string) => {
@@ -98,21 +79,14 @@ export default function NotificationsScreen() {
     }
   };
 
-  const todayNotifications = notifications.filter(
-    (n) => !n.timestamp.includes('Yesterday')
-  );
-  const yesterdayNotifications = notifications.filter((n) =>
-    n.timestamp.includes('Yesterday')
-  );
+  const todayNotifications = notifications.filter(n => !n.timestamp.includes('Yesterday'));
+  const yesterdayNotifications = notifications.filter(n => n.timestamp.includes('Yesterday'));
 
   return (
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
+        <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
           <ArrowLeft size={24} color="#374151" />
         </TouchableOpacity>
         <Text style={styles.title}>Notifications</Text>
@@ -126,17 +100,11 @@ export default function NotificationsScreen() {
         {todayNotifications.length > 0 && (
           <>
             <Text style={styles.sectionTitle}>Today</Text>
-            {todayNotifications.map((notification) => (
-              <TouchableOpacity
-                key={notification.id}
-                onPress={() => markAsRead(notification.id)}
-                activeOpacity={0.8}
-              >
+            {todayNotifications.map(notification => (
+              <TouchableOpacity key={notification.id} onPress={() => markAsRead(notification.id)} activeOpacity={0.8}>
                 <Card
                   style={
-                    notification.isRead
-                      ? styles.notificationCard
-                      : { ...styles.notificationCard, ...styles.unreadCard }
+                    notification.isRead ? styles.notificationCard : { ...styles.notificationCard, ...styles.unreadCard }
                   }
                 >
                   <View style={styles.notificationContent}>
@@ -144,30 +112,19 @@ export default function NotificationsScreen() {
                       style={[
                         styles.notificationIcon,
                         {
-                          backgroundColor: getIconBackgroundColor(
-                            notification.type
-                          ),
+                          backgroundColor: getIconBackgroundColor(notification.type),
                         },
                       ]}
                     >
                       {getNotificationIcon(notification.icon || 'info')}
                     </View>
                     <View style={styles.notificationText}>
-                      <Text
-                        style={[
-                          styles.notificationTitle,
-                          !notification.isRead && styles.unreadTitle,
-                        ]}
-                      >
+                      <Text style={[styles.notificationTitle, !notification.isRead && styles.unreadTitle]}>
                         {notification.title}
                       </Text>
-                      <Text style={styles.notificationMessage}>
-                        {notification.message}
-                      </Text>
+                      <Text style={styles.notificationMessage}>{notification.message}</Text>
                     </View>
-                    <Text style={styles.notificationTime}>
-                      {notification.timestamp}
-                    </Text>
+                    <Text style={styles.notificationTime}>{notification.timestamp}</Text>
                   </View>
                   {!notification.isRead && <View style={styles.unreadDot} />}
                 </Card>
@@ -180,17 +137,11 @@ export default function NotificationsScreen() {
         {yesterdayNotifications.length > 0 && (
           <>
             <Text style={styles.sectionTitle}>Yesterday</Text>
-            {yesterdayNotifications.map((notification) => (
-              <TouchableOpacity
-                key={notification.id}
-                onPress={() => markAsRead(notification.id)}
-                activeOpacity={0.8}
-              >
+            {yesterdayNotifications.map(notification => (
+              <TouchableOpacity key={notification.id} onPress={() => markAsRead(notification.id)} activeOpacity={0.8}>
                 <Card
                   style={
-                    notification.isRead
-                      ? styles.notificationCard
-                      : { ...styles.notificationCard, ...styles.unreadCard }
+                    notification.isRead ? styles.notificationCard : { ...styles.notificationCard, ...styles.unreadCard }
                   }
                 >
                   <View style={styles.notificationContent}>
@@ -198,30 +149,19 @@ export default function NotificationsScreen() {
                       style={[
                         styles.notificationIcon,
                         {
-                          backgroundColor: getIconBackgroundColor(
-                            notification.type
-                          ),
+                          backgroundColor: getIconBackgroundColor(notification.type),
                         },
                       ]}
                     >
                       {getNotificationIcon(notification.icon || 'info')}
                     </View>
                     <View style={styles.notificationText}>
-                      <Text
-                        style={[
-                          styles.notificationTitle,
-                          !notification.isRead && styles.unreadTitle,
-                        ]}
-                      >
+                      <Text style={[styles.notificationTitle, !notification.isRead && styles.unreadTitle]}>
                         {notification.title}
                       </Text>
-                      <Text style={styles.notificationMessage}>
-                        {notification.message}
-                      </Text>
+                      <Text style={styles.notificationMessage}>{notification.message}</Text>
                     </View>
-                    <Text style={styles.notificationTime}>
-                      {notification.timestamp}
-                    </Text>
+                    <Text style={styles.notificationTime}>{notification.timestamp}</Text>
                   </View>
                   {!notification.isRead && <View style={styles.unreadDot} />}
                 </Card>

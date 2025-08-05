@@ -111,7 +111,7 @@ export default function ToiletCheckScreen() {
       };
 
       setCheckHistory(prev => [newEntry, ...prev]);
-      
+
       // Reset form
       setSelectedImage(null);
       setStatus(null);
@@ -127,15 +127,11 @@ export default function ToiletCheckScreen() {
   };
 
   const showImagePicker = () => {
-    Alert.alert(
-      'Select Photo',
-      'Choose how you want to add a photo',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Take Photo', onPress: takePhoto },
-        { text: 'Choose from Gallery', onPress: pickImage },
-      ]
-    );
+    Alert.alert('Select Photo', 'Choose how you want to add a photo', [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Take Photo', onPress: takePhoto },
+      { text: 'Choose from Gallery', onPress: pickImage },
+    ]);
   };
 
   return (
@@ -177,35 +173,23 @@ export default function ToiletCheckScreen() {
         <Text style={styles.sectionTitle}>Cleanliness Status</Text>
         <View style={styles.statusButtons}>
           <TouchableOpacity
-            style={[
-              styles.statusButton,
-              status === 'clean' && styles.statusButtonSelected,
-              { borderColor: '#10B981' }
-            ]}
+            style={[styles.statusButton, status === 'clean' && styles.statusButtonSelected, { borderColor: '#10B981' }]}
             onPress={() => setStatus('clean')}
           >
             <CheckCircle size={24} color={status === 'clean' ? '#FFFFFF' : '#10B981'} />
-            <Text style={[
-              styles.statusButtonText,
-              status === 'clean' && styles.statusButtonTextSelected
-            ]}>
-              Clean
-            </Text>
+            <Text style={[styles.statusButtonText, status === 'clean' && styles.statusButtonTextSelected]}>Clean</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={[
               styles.statusButton,
               status === 'not-clean' && styles.statusButtonSelected,
-              { borderColor: '#EF4444' }
+              { borderColor: '#EF4444' },
             ]}
             onPress={() => setStatus('not-clean')}
           >
             <XCircle size={24} color={status === 'not-clean' ? '#FFFFFF' : '#EF4444'} />
-            <Text style={[
-              styles.statusButtonText,
-              status === 'not-clean' && styles.statusButtonTextSelected
-            ]}>
+            <Text style={[styles.statusButtonText, status === 'not-clean' && styles.statusButtonTextSelected]}>
               Not Clean
             </Text>
           </TouchableOpacity>
@@ -239,7 +223,7 @@ export default function ToiletCheckScreen() {
       {/* Check History */}
       <Card style={styles.historyCard}>
         <Text style={styles.sectionTitle}>Recent Checks</Text>
-        {checkHistory.map((entry) => (
+        {checkHistory.map(entry => (
           <View key={entry.id} style={styles.historyItem}>
             <Image source={{ uri: entry.photoUri }} style={styles.historyImage} />
             <View style={styles.historyContent}>
@@ -250,10 +234,7 @@ export default function ToiletCheckScreen() {
                   ) : (
                     <XCircle size={16} color="#EF4444" />
                   )}
-                  <Text style={[
-                    styles.statusText,
-                    { color: entry.status === 'clean' ? '#10B981' : '#EF4444' }
-                  ]}>
+                  <Text style={[styles.statusText, { color: entry.status === 'clean' ? '#10B981' : '#EF4444' }]}>
                     {entry.status === 'clean' ? 'Clean' : 'Not Clean'}
                   </Text>
                 </View>
@@ -262,9 +243,7 @@ export default function ToiletCheckScreen() {
                 </Text>
               </View>
               <Text style={styles.historyLocation}>{entry.location}</Text>
-              {entry.comments && (
-                <Text style={styles.historyComments}>{entry.comments}</Text>
-              )}
+              {entry.comments && <Text style={styles.historyComments}>{entry.comments}</Text>}
             </View>
           </View>
         ))}

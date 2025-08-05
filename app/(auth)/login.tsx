@@ -11,8 +11,12 @@ import { LoginRequest } from '../../types/auth';
 export default function LoginScreen() {
   const { login, isLoading } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
-  const { control, handleSubmit, formState: { errors } } = useForm<LoginRequest>({
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginRequest>({
     defaultValues: {
       email: '',
       password: '',
@@ -32,10 +36,7 @@ export default function LoginScreen() {
   };
 
   return (
-    <KeyboardAvoidingView 
-      style={styles.container} 
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
+    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
           <Text style={styles.title}>Welcome Back</Text>
@@ -92,7 +93,7 @@ export default function LoginScreen() {
             name="password"
           />
 
-           <Link href='/forgot-password' style={styles.forgotPassword}>
+          <Link href="/forgot-password" style={styles.forgotPassword}>
             forgot password
           </Link>
 

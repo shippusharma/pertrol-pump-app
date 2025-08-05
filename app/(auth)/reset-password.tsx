@@ -1,13 +1,6 @@
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import {
-  Alert,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 export default function ResetPasswordScreen() {
   const [otp, setOtp] = useState('');
@@ -38,13 +31,7 @@ export default function ResetPasswordScreen() {
       <Text style={styles.heading}>Reset Password</Text>
       <Text style={styles.subtext}>Set a new password for your account.</Text>
 
-      <TextInput
-        placeholder="otp"
-        style={styles.input}
-        secureTextEntry
-        value={otp}
-        onChangeText={setOtp}
-      />
+      <TextInput placeholder="otp" style={styles.input} secureTextEntry value={otp} onChangeText={setOtp} />
 
       <TextInput
         placeholder="New password"

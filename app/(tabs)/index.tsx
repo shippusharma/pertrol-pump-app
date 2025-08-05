@@ -1,14 +1,5 @@
 import { router } from 'expo-router';
-import {
-  Bell,
-  Calendar,
-  Camera,
-  Clock,
-  CreditCard,
-  Fuel,
-  LogOut,
-  MapPin
-} from 'lucide-react-native';
+import { Bell, Calendar, Camera, Clock, CreditCard, Fuel, LogOut, MapPin } from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Button } from '../../components/Button';
@@ -36,14 +27,10 @@ export default function Dashboard() {
   }, []);
 
   const handleLogout = () => {
-    Alert.alert(
-      'Logout',
-      'Are you sure you want to logout?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Logout', style: 'destructive', onPress: logout },
-      ]
-    );
+    Alert.alert('Logout', 'Are you sure you want to logout?', [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Logout', style: 'destructive', onPress: logout },
+    ]);
   };
 
   const dashboardCards: DashboardCard[] = [
@@ -93,17 +80,11 @@ export default function Dashboard() {
             </View>
           </View>
           <View style={styles.headerActions}>
-            <TouchableOpacity 
-              style={styles.notificationButton}
-              onPress={() => router.push('/notifications')}
-            >
+            <TouchableOpacity style={styles.notificationButton} onPress={() => router.push('/notifications')}>
               <Bell size={24} color="#374151" />
               <View style={styles.notificationBadge} />
             </TouchableOpacity>
-            <TouchableOpacity 
-              style={styles.settingsButton}
-              onPress={handleLogout}
-            >
+            <TouchableOpacity style={styles.settingsButton} onPress={handleLogout}>
               <LogOut size={24} color="#374151" />
             </TouchableOpacity>
           </View>
@@ -113,19 +94,11 @@ export default function Dashboard() {
       {/* Quick Stats */}
       <View style={styles.statsGrid}>
         {dashboardCards.map((card, index) => (
-          <TouchableOpacity
-            key={index}
-            style={styles.statCard}
-            onPress={card.onPress}
-            activeOpacity={0.8}
-          >
-            <Card style={StyleSheet.flatten([
-              styles.statCardContent,
-              card?.color ? { backgroundColor: card.color } : {}
-            ])}>
-              <View style={styles.statIcon}>
-                {card.icon}
-              </View>
+          <TouchableOpacity key={index} style={styles.statCard} onPress={card.onPress} activeOpacity={0.8}>
+            <Card
+              style={StyleSheet.flatten([styles.statCardContent, card?.color ? { backgroundColor: card.color } : {}])}
+            >
+              <View style={styles.statIcon}>{card.icon}</View>
               <Text style={styles.statValue}>{card.value}</Text>
               <Text style={styles.statTitle}>{card.title}</Text>
             </Card>
@@ -136,7 +109,7 @@ export default function Dashboard() {
       {/* Today's Summary */}
       <Card style={styles.summaryCard}>
         <Text style={styles.sectionTitle}>Today&apos;s Summary</Text>
-        
+
         <View style={styles.summaryItem}>
           <View style={styles.summaryIcon}>
             <MapPin size={20} color="#10B981" />

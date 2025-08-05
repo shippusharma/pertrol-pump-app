@@ -47,7 +47,6 @@
 <br/>
 <br/>
 
-
 ```txt
 Notes & Dependencies
 Install EAS CLI if not already:

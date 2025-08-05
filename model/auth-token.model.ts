@@ -1,8 +1,7 @@
-import { dbTablesName } from "@/configs/db/tables-name";
-import { Schema, model } from "mongoose";
-import { IAuthTokenSchema } from "./types/auth-token";
-import { schemaOptions } from "./utils/schema-options";
-
+import { dbTablesName } from '@/configs/db/tables-name';
+import { Schema, model } from 'mongoose';
+import { IAuthTokenSchema } from './types/auth-token';
+import { schemaOptions } from './utils/schema-options';
 
 const tokenSchema = new Schema<IAuthTokenSchema>(
   {

@@ -1,15 +1,9 @@
 /* eslint-disable */
-import axios, {
-  type AxiosError,
-  type AxiosInstance,
-  type AxiosRequestConfig,
-  type AxiosResponse,
-} from 'axios';
+import axios, { type AxiosError, type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios';
 import * as SecureStore from 'expo-secure-store'; // For secure token storage
 // import { serverUrlWithApiVersion } from '@/configs'; // Import server URL configuration
 
-const serverUrlWithApiVersion =
-  'https://02tpvo4tpb.execute-api.ap-south-1.amazonaws.com/staging/auth-service/api/v1';
+const serverUrlWithApiVersion = 'https://02tpvo4tpb.execute-api.ap-south-1.amazonaws.com/staging/auth-service/api/v1';
 
 // Extend AxiosRequestConfig with optional _retry flag for token refresh tracking
 interface InternalAxiosRequestConfig extends AxiosRequestConfig {
@@ -52,7 +46,7 @@ export class ApiInstance {
   private setupInterceptors() {
     // Request interceptor - runs before each request
     this.axiosInstance.interceptors.request.use(
-      async (config) => {
+      async config => {
         // Get access token from secure storage
         const accessToken = await SecureStore.getItemAsync('accessToken');
         // Add authorization header if token exists
@@ -94,19 +88,14 @@ export class ApiInstance {
   // Checks if error indicates session termination
   private isSessionTerminatedError(errorData: any): boolean {
     // Extract error message if available
-    const errorMessage =
-      typeof errorData === 'object' && 'message' in errorData
-        ? errorData.message
-        : '';
+    const errorMessage = typeof errorData === 'object' && 'message' in errorData ? errorData.message : '';
     return errorMessage.toLowerCase() === 'session terminated'; // Check for session termination message
   }
 
   /**
    * Refresh the access token using the refresh token
    */
-  private async handleTokenRefresh(
-    originalRequest: InternalAxiosRequestConfig
-  ): Promise<AxiosResponse> {
+  private async handleTokenRefresh(originalRequest: InternalAxiosRequestConfig): Promise<AxiosResponse> {
     this.isRefreshing = true; // Set refresh flag
     originalRequest._retry = true; // Mark request as retried
     try {
@@ -122,9 +111,7 @@ export class ApiInstance {
   }
 
   // Queues failed requests during token refresh
-  private queueRequest(
-    originalRequest: InternalAxiosRequestConfig
-  ): Promise<unknown> {
+  private queueRequest(originalRequest: InternalAxiosRequestConfig): Promise<unknown> {
     return new Promise((resolve, reject) => {
       // Clone request config and mark as retried
       const configToQueue = { ...originalRequest, _retry: true };
@@ -154,10 +141,7 @@ export class ApiInstance {
 
       // Validate successful response
       if (response.data.status === 200 && response.data.success) {
-        await this.updateTokens(
-          response.data.accessToken,
-          response.data.refreshToken
-        ); // Update tokens
+        await this.updateTokens(response.data.accessToken, response.data.refreshToken); // Update tokens
       } else {
         throw new Error('Failed to refresh token'); // Throw if refresh failed
       }
@@ -168,10 +152,7 @@ export class ApiInstance {
   }
 
   // Updates tokens in secure storage and axios headers
-  private async updateTokens(
-    accessToken: string,
-    refreshToken: string
-  ): Promise<void> {
+  private async updateTokens(accessToken: string, refreshToken: string): Promise<void> {
     // Store tokens in secure storage
     await Promise.all([
       SecureStore.setItemAsync('accessToken', accessToken),
@@ -187,13 +168,13 @@ export class ApiInstance {
 
   // Processes all queued requests after token refresh
   private processQueuedRequests(): void {
-    this.failedQueue.forEach((prom) => prom.resolve()); // Resolve each queued promise
+    this.failedQueue.forEach(prom => prom.resolve()); // Resolve each queued promise
     this.failedQueue = []; // Clear the queue
   }
 
   // Handles errors during token refresh
   private handleRefreshError(error: AxiosError): void {
-    this.failedQueue.forEach((prom) => prom.reject(error)); // Reject all queued promises
+    this.failedQueue.forEach(prom => prom.reject(error)); // Reject all queued promises
     this.failedQueue = []; // Clear the queue
     this.clearStoredCredentials(); // Clear stored credentials
     // In React Native, you would navigate to login screen instead of href
@@ -206,10 +187,7 @@ export class ApiInstance {
    */
   private async clearStoredCredentials(): Promise<void> {
     // Remove tokens from secure storage
-    await Promise.all([
-      SecureStore.deleteItemAsync('accessToken'),
-      SecureStore.deleteItemAsync('refreshToken'),
-    ]);
+    await Promise.all([SecureStore.deleteItemAsync('accessToken'), SecureStore.deleteItemAsync('refreshToken')]);
 
     // Reset Redux store
     // resetReduxStoredData();
@@ -251,14 +229,7 @@ export class ApiInstance {
     headers: Record<string, string> = {},
     configOverrides: AxiosRequestConfig = {}
   ): Promise<T> {
-    return this.request<T>(
-      'get',
-      url,
-      params,
-      undefined,
-      headers,
-      configOverrides
-    );
+    return this.request<T>('get', url, params, undefined, headers, configOverrides);
   }
 
   // POST request wrapper
@@ -268,14 +239,7 @@ export class ApiInstance {
     headers: Record<string, string> = {},
     configOverrides: AxiosRequestConfig = {}
   ): Promise<T> {
-    return this.request<T>(
-      'post',
-      url,
-      undefined,
-      data,
-      headers,
-      configOverrides
-    );
+    return this.request<T>('post', url, undefined, data, headers, configOverrides);
   }
 
   // PUT request wrapper
@@ -285,14 +249,7 @@ export class ApiInstance {
     headers: Record<string, string> = {},
     configOverrides: AxiosRequestConfig = {}
   ): Promise<T> {
-    return this.request<T>(
-      'put',
-      url,
-      undefined,
-      data,
-      headers,
-      configOverrides
-    );
+    return this.request<T>('put', url, undefined, data, headers, configOverrides);
   }
 
   // PATCH request wrapper
@@ -302,14 +259,7 @@ export class ApiInstance {
     headers: Record<string, string> = {},
     configOverrides: AxiosRequestConfig = {}
   ): Promise<T> {
-    return this.request<T>(
-      'patch',
-      url,
-      undefined,
-      data,
-      headers,
-      configOverrides
-    );
+    return this.request<T>('patch', url, undefined, data, headers, configOverrides);
   }
 
   // DELETE request wrapper
@@ -319,14 +269,7 @@ export class ApiInstance {
     headers: Record<string, string> = {},
     configOverrides: AxiosRequestConfig = {}
   ): Promise<T> {
-    return this.request<T>(
-      'delete',
-      url,
-      undefined,
-      data,
-      headers,
-      configOverrides
-    );
+    return this.request<T>('delete', url, undefined, data, headers, configOverrides);
   }
 
   // Aborts all pending requests

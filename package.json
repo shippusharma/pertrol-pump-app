@@ -11,7 +11,11 @@
     "web": "expo start --web",
     "doctor": "expo doctor",
     "prebuild": "expo prebuild",
-    "lint": "expo lint",
+    "expo:lint": "expo lint",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"**/*.{ts,tsx,md,js,jsx,cjs,mjs,json,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,md,js,jsx,cjs,mjs,json,yml,yaml}\"",
     "clean": "rm -rf node_modules .expo .expo-shared dist android/build ios/build && bun cache clean",
     "reset": "expo start -c",
     "bundle:android": "bunx expo export --platform android --output-dir android/app/src/main/assets",
@@ -19,7 +23,16 @@
     "build:android:aab": "bun run bundle:android && cd android && ./gradlew bundleRelease",
     "build:android:debug": "cd android && ./gradlew assembleDebug",
     "clean:android": "cd android && ./gradlew clean",
-    "clean:all": "bun run clean && cd android && ./gradlew clean"
+    "clean:all": "bun run clean && cd android && ./gradlew clean",
+    "lint-staged": "lint-staged --concurrent false",
+    "pretty-quick": "pnpx pretty-quick --staged",
+    "prepare": "rm -rf .husky && husky install && husky add .husky/post-merge \"bun install\" && husky add .husky/pre-commit \"bun lint-staged\""
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx,cjs,mjs,mts}": [
+      "bun run format",
+      "bun run lint"
+    ]
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
@@ -56,15 +69,26 @@
     "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "~4.11.1",
     "react-native-web": "~0.20.0",
-    "react-native-webview": "13.13.5"
+    "react-native-webview": "13.13.5",
+    "zod": "^4.0.14"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
+    "@eslint/js": "^9.32.0",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/react": "~19.0.10",
-    "eslint": "^9.25.0",
+    "eslint": "^9.32.0",
     "eslint-config-expo": "~9.2.0",
-    "typescript": "~5.8.3"
+    "eslint-config-universe": "^15.0.3",
+    "eslint-plugin-prettier": "^5.5.3",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^16.3.0",
+    "husky": "^8.0.3",
+    "jiti": "^2.5.1",
+    "lint-staged": "^16.1.4",
+    "prettier": "^3.6.2",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.39.0"
   },
   "private": true
 }

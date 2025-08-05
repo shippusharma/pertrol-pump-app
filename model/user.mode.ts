@@ -1,11 +1,10 @@
-import { dbTablesName } from "@/configs/db/tables-name";
-import { comparingHash, convertIntoHash } from "@/lib/hashing";
-import { Schema, model } from "mongoose";
-import { EGenderType, ERoleType } from "../types/enums";
-import { IUserSchema } from "./types/user";
-import { schemaOptions } from "./utils/schema-options";
-import { fileSchema } from "./utils/upload-file";
-
+import { dbTablesName } from '@/configs/db/tables-name';
+import { comparingHash, convertIntoHash } from '@/lib/hashing';
+import { Schema, model } from 'mongoose';
+import { EGenderType, ERoleType } from '../types/enums';
+import { IUserSchema } from './types/user';
+import { schemaOptions } from './utils/schema-options';
+import { fileSchema } from './utils/upload-file';
 
 const userSchema = new Schema<IUserSchema>(
   {

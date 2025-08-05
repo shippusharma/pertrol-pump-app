@@ -12,6 +12,7 @@ Your Android APK has been successfully built using **Bun** and **Expo** (without
 ## 🚀 How to Install on Your Phone
 
 ### 1. Enable Developer Options on Your Android Phone
+
 - Go to **Settings** → **About Phone**
 - Tap **"Build Number"** 7 times
 - Go back to **Settings** → **Developer Options**
@@ -20,6 +21,7 @@ Your Android APK has been successfully built using **Bun** and **Expo** (without
 ### 2. Connect Your Phone via USB
 
 ### 3. Install the APK
+
 ```bash
 # Navigate to your project directory
 cd /Users/gloitel/Documents/codebase/petrol-pump-app
@@ -31,6 +33,7 @@ adb install android/app/build/outputs/apk/release/app-release.apk
 ## 🔧 Build Commands Used
 
 ### Quick Build Commands
+
 ```bash
 # Build Release APK
 bun run build:android:apk
@@ -43,6 +46,7 @@ bun run build:android:aab
 ```
 
 ### Manual Build Process
+
 ```bash
 # 1. Bundle JavaScript and Assets
 bunx expo export --platform android --output-dir android/app/src/main/assets
@@ -58,7 +62,7 @@ cd android && ./gradlew assembleRelease
 ✅ **Expo Export** - Bundled JavaScript and assets using Expo CLI  
 ✅ **Gradle Build** - Native Android build using Gradle  
 ✅ **App Icons** - Your app includes proper icons (icon.png, adaptive-icon.png)  
-✅ **Release APK** - 80MB production-ready APK  
+✅ **Release APK** - 80MB production-ready APK
 
 ## 🎯 Key Features
 
@@ -104,4 +108,4 @@ Your Android APK is ready to install on your phone! The build process successful
 **Build completed on**: August 2, 2024  
 **Build time**: ~6 minutes  
 **APK size**: 80MB  
-**Status**: ✅ Success 
+**Status**: ✅ Success

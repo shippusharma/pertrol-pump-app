@@ -1,20 +1,16 @@
+/* eslint-disable no-console */
 import { DUMMY_TOKENS, DUMMY_USERS } from '../app/api/data';
 import { AuthTokens, LoginRequest, RegisterRequest, User } from '../types/auth';
 import { authStorage } from './auth-storage';
 
 export const authService = {
-  async login(
-    credentials: LoginRequest
-  ): Promise<{ user: User; tokens: AuthTokens }> {
+  async login(credentials: LoginRequest): Promise<{ user: User; tokens: AuthTokens }> {
     try {
       // const response = await api.post('/auth/login', credentials);
       // const { user, accessToken, refreshToken } = response.data;
 
       // Store tokens securely
-      await authStorage.setAuth(
-        DUMMY_TOKENS.accessToken,
-        DUMMY_TOKENS.refreshToken
-      );
+      await authStorage.setAuth(DUMMY_TOKENS.accessToken, DUMMY_TOKENS.refreshToken);
 
       return {
         user: DUMMY_USERS[0],
@@ -28,18 +24,13 @@ export const authService = {
     }
   },
 
-  async register(
-    userData: RegisterRequest
-  ): Promise<{ user: User; tokens: AuthTokens }> {
+  async register(userData: RegisterRequest): Promise<{ user: User; tokens: AuthTokens }> {
     try {
       // const response = await api.post('/auth/register', userData);
       // const { user, accessToken, refreshToken } = response.data;
 
       // Store tokens securely
-      await authStorage.setAuth(
-        DUMMY_TOKENS.accessToken,
-        DUMMY_TOKENS.refreshToken
-      );
+      await authStorage.setAuth(DUMMY_TOKENS.accessToken, DUMMY_TOKENS.refreshToken);
 
       return {
         user: DUMMY_USERS[0],

@@ -59,8 +59,8 @@ export default function AboutScreen() {
             </View>
           </View>
           <Text style={styles.appDescription}>
-            A comprehensive field utility tracking application designed to streamline operations, 
-            monitor resources, and enhance productivity for field teams.
+            A comprehensive field utility tracking application designed to streamline operations, monitor resources, and
+            enhance productivity for field teams.
           </Text>
         </Card>
 
@@ -69,9 +69,7 @@ export default function AboutScreen() {
           <Text style={styles.sectionTitle}>Key Features</Text>
           {features.map((feature, index) => (
             <View key={index} style={styles.featureItem}>
-              <View style={styles.featureIcon}>
-                {feature.icon}
-              </View>
+              <View style={styles.featureIcon}>{feature.icon}</View>
               <View style={styles.featureContent}>
                 <Text style={styles.featureTitle}>{feature.title}</Text>
                 <Text style={styles.featureDescription}>{feature.description}</Text>
@@ -83,7 +81,7 @@ export default function AboutScreen() {
         {/* Contact Information */}
         <Card style={styles.contactCard}>
           <Text style={styles.sectionTitle}>Contact Information</Text>
-          
+
           <TouchableOpacity style={styles.contactItem} onPress={openEmail}>
             <View style={styles.contactIcon}>
               <Mail size={20} color="#2563EB" />
@@ -132,9 +130,7 @@ export default function AboutScreen() {
         {/* Legal */}
         <Card style={styles.legalCard}>
           <Text style={styles.sectionTitle}>Legal</Text>
-          <Text style={styles.legalText}>
-            © 2024 Field Utility Tracker. All rights reserved.
-          </Text>
+          <Text style={styles.legalText}>© 2024 Field Utility Tracker. All rights reserved.</Text>
           <Text style={styles.legalText}>
             This application is designed for professional field operations management.
           </Text>

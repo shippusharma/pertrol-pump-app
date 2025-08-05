@@ -1,0 +1,29 @@
+# Ignore artifacts:
+build/
+dist/
+coverage/
+
+# Ignore development files:
+.expo/
+.expo-shared/
+.git/
+.vscode/
+
+# Ignore modules:
+node_modules/
+
+# Ignore configuration files (already handled by Prettier itself):
+package.json
+package-lock.json
+yarn.lock
+
+# Ignore native directories (if you've prebuilt):
+android/
+ios/
+
+# Ignore environment files
+.env
+.env.*
+
+# Ignore other files (example: files for generated assets)
+assets/generated/

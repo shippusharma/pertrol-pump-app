@@ -8,15 +8,10 @@ interface CardProps {
   padding?: 'none' | 'sm' | 'md' | 'lg';
 }
 
-export const Card: React.FC<CardProps> = ({
-  children,
-  style,
-  variant = 'default',
-  padding = 'md',
-}) => {
+export const Card: React.FC<CardProps> = ({ children, style, variant = 'default', padding = 'md' }) => {
   const getCardStyle = () => {
     const baseStyle = [styles.card, styles[padding]];
-    
+
     if (variant === 'elevated') {
       baseStyle.push(styles.elevated);
     } else if (variant === 'outlined') {
@@ -24,15 +19,11 @@ export const Card: React.FC<CardProps> = ({
     } else {
       baseStyle.push(styles.default);
     }
-    
+
     return baseStyle;
   };
 
-  return (
-    <View style={[...getCardStyle(), style]}>
-      {children}
-    </View>
-  );
+  return <View style={[...getCardStyle(), style]}>{children}</View>;
 };
 
 const styles = StyleSheet.create({

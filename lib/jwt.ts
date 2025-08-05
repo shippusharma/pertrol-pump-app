@@ -27,7 +27,7 @@ class JWTHelper {
   verifyShortToken<T extends object>(token: string, secret: string): T | null {
     try {
       return jwt.verify(token, `${secret}-${this.accessTokenSecret}`) as T;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
     } catch (error) {
       return null;
     }
@@ -35,18 +35,14 @@ class JWTHelper {
 
   //------------------------------------------------------------------------------------------
 
-  private generateToken(
-    { _id, role }: IUserSchema,
-    secret: string,
-    expiresIn: jwt.SignOptions['expiresIn']
-  ): string {
-    return jwt.sign({ _id, role, }, secret, { expiresIn });
+  private generateToken({ _id, role }: IUserSchema, secret: string, expiresIn: jwt.SignOptions['expiresIn']): string {
+    return jwt.sign({ _id, role }, secret, { expiresIn });
   }
 
   private verifyToken(token: string, secret: string): IUserSchema | null {
     try {
       return jwt.verify(token, secret) as IUserSchema;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
     } catch (error) {
       return null;
     }
@@ -88,4 +84,4 @@ class JWTHelper {
   }
 }
 
-export const Jwt = new JWTHelper('accessTokenSecret', 'refreshTokenSecret')
+export const Jwt = new JWTHelper('accessTokenSecret', 'refreshTokenSecret');

@@ -18,10 +18,7 @@ export const authStorage = {
   },
 
   async deleteAuth() {
-    await Promise.all([
-      SecureStore.deleteItemAsync('accessToken'),
-      SecureStore.deleteItemAsync('refreshToken'),
-    ]);
+    await Promise.all([SecureStore.deleteItemAsync('accessToken'), SecureStore.deleteItemAsync('refreshToken')]);
   },
 
   async deleteAccessToken() {

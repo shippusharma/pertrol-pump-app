@@ -21,7 +21,7 @@ export default function TransactionsScreen() {
   const [description, setDescription] = useState('');
   const [transactionType, setTransactionType] = useState<'income' | 'expense'>('income');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   const [transactions, setTransactions] = useState<Transaction[]>([
     {
       id: '1',
@@ -62,11 +62,11 @@ export default function TransactionsScreen() {
   ]);
 
   const filteredTransactions = transactions.filter(t => t.category === activeTab);
-  
+
   const totalCash = transactions
     .filter(t => t.category === 'cash')
     .reduce((sum, t) => sum + (t.type === 'income' ? t.amount : -t.amount), 0);
-  
+
   const totalUPI = transactions
     .filter(t => t.category === 'upi')
     .reduce((sum, t) => sum + (t.type === 'income' ? t.amount : -t.amount), 0);
@@ -102,7 +102,7 @@ export default function TransactionsScreen() {
       };
 
       setTransactions(prev => [newTransaction, ...prev]);
-      
+
       // Reset form
       setAmount('');
       setDescription('');
@@ -143,17 +143,13 @@ export default function TransactionsScreen() {
           style={[styles.tab, activeTab === 'cash' && styles.activeTab]}
           onPress={() => setActiveTab('cash')}
         >
-          <Text style={[styles.tabText, activeTab === 'cash' && styles.activeTabText]}>
-            CASH
-          </Text>
+          <Text style={[styles.tabText, activeTab === 'cash' && styles.activeTabText]}>CASH</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.tab, activeTab === 'upi' && styles.activeTab]}
           onPress={() => setActiveTab('upi')}
         >
-          <Text style={[styles.tabText, activeTab === 'upi' && styles.activeTabText]}>
-            UPI
-          </Text>
+          <Text style={[styles.tabText, activeTab === 'upi' && styles.activeTabText]}>UPI</Text>
         </TouchableOpacity>
       </View>
 
@@ -161,75 +157,43 @@ export default function TransactionsScreen() {
       <Card style={styles.summaryCard}>
         <Text style={styles.sectionTitle}>Summary</Text>
         <View style={styles.summaryContent}>
-          <Text style={styles.summaryLabel}>
-            Total {activeTab.toUpperCase()}
-          </Text>
-          <Text style={styles.summaryAmount}>
-            ${activeTab === 'cash' ? totalCash : totalUPI}
-          </Text>
+          <Text style={styles.summaryLabel}>Total {activeTab.toUpperCase()}</Text>
+          <Text style={styles.summaryAmount}>${activeTab === 'cash' ? totalCash : totalUPI}</Text>
         </View>
       </Card>
 
       {/* Add Transaction */}
       <Card style={styles.addCard}>
         <Text style={styles.sectionTitle}>Add Transaction</Text>
-        
-        <Input
-          placeholder="Amount"
-          value={amount}
-          onChangeText={setAmount}
-          keyboardType="numeric"
-          variant="filled"
-        />
+
+        <Input placeholder="Amount" value={amount} onChangeText={setAmount} keyboardType="numeric" variant="filled" />
 
         {/* Transaction Type Selector */}
         <View style={styles.typeSelector}>
           <TouchableOpacity
-            style={[
-              styles.typeButton,
-              transactionType === 'income' && styles.typeButtonSelected,
-            ]}
+            style={[styles.typeButton, transactionType === 'income' && styles.typeButtonSelected]}
             onPress={() => setTransactionType('income')}
           >
             <TrendingUp size={16} color={transactionType === 'income' ? '#FFFFFF' : '#10B981'} />
-            <Text style={[
-              styles.typeButtonText,
-              transactionType === 'income' && styles.typeButtonTextSelected
-            ]}>
+            <Text style={[styles.typeButtonText, transactionType === 'income' && styles.typeButtonTextSelected]}>
               Income
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[
-              styles.typeButton,
-              transactionType === 'expense' && styles.typeButtonSelected,
-            ]}
+            style={[styles.typeButton, transactionType === 'expense' && styles.typeButtonSelected]}
             onPress={() => setTransactionType('expense')}
           >
             <TrendingDown size={16} color={transactionType === 'expense' ? '#FFFFFF' : '#EF4444'} />
-            <Text style={[
-              styles.typeButtonText,
-              transactionType === 'expense' && styles.typeButtonTextSelected
-            ]}>
+            <Text style={[styles.typeButtonText, transactionType === 'expense' && styles.typeButtonTextSelected]}>
               Expense
             </Text>
           </TouchableOpacity>
         </View>
 
-        <Input
-          placeholder="Comment"
-          value={description}
-          onChangeText={setDescription}
-          variant="filled"
-        />
+        <Input placeholder="Comment" value={description} onChangeText={setDescription} variant="filled" />
 
-        <Button
-          title="Add Transaction"
-          onPress={handleSubmit}
-          loading={isSubmitting}
-          style={styles.addButton}
-        />
+        <Button title="Add Transaction" onPress={handleSubmit} loading={isSubmitting} style={styles.addButton} />
       </Card>
 
       {/* Past Transactions */}
@@ -252,26 +216,25 @@ export default function TransactionsScreen() {
         {filteredTransactions.length === 0 ? (
           <Text style={styles.emptyText}>No transactions found</Text>
         ) : (
-          filteredTransactions.map((transaction) => (
+          filteredTransactions.map(transaction => (
             <View key={transaction.id} style={styles.transactionItem}>
-              <View style={[
-                styles.transactionIcon,
-                { backgroundColor: transaction.type === 'income' ? '#10B981' : '#EF4444' }
-              ]}>
+              <View
+                style={[
+                  styles.transactionIcon,
+                  { backgroundColor: transaction.type === 'income' ? '#10B981' : '#EF4444' },
+                ]}
+              >
                 {getTransactionIcon(transaction.icon)}
               </View>
               <View style={styles.transactionContent}>
-                <Text style={styles.transactionDescription}>
-                  {transaction.description}
-                </Text>
+                <Text style={styles.transactionDescription}>{transaction.description}</Text>
                 <Text style={styles.transactionType}>
                   {transaction.type} • {transaction.timestamp.toLocaleDateString()}
                 </Text>
               </View>
-              <Text style={[
-                styles.transactionAmount,
-                { color: transaction.type === 'income' ? '#10B981' : '#EF4444' }
-              ]}>
+              <Text
+                style={[styles.transactionAmount, { color: transaction.type === 'income' ? '#10B981' : '#EF4444' }]}
+              >
                 {transaction.type === 'income' ? '+' : '-'}${transaction.amount}
               </Text>
             </View>

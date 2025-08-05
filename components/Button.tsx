@@ -24,7 +24,7 @@ export const Button: React.FC<ButtonProps> = ({
 }) => {
   const getButtonStyle = () => {
     const baseStyle = [styles.button, styles[size]];
-    
+
     if (variant === 'primary') {
       baseStyle.push(styles.primary);
     } else if (variant === 'secondary') {
@@ -32,17 +32,17 @@ export const Button: React.FC<ButtonProps> = ({
     } else if (variant === 'outline') {
       baseStyle.push(styles.outline);
     }
-    
+
     if (disabled || loading) {
       baseStyle.push(styles.disabled);
     }
-    
+
     return baseStyle;
   };
 
   const getTextStyle = () => {
     const baseStyle = [styles.text, styles[`${size}Text`]];
-    
+
     if (variant === 'primary') {
       baseStyle.push(styles.primaryText);
     } else if (variant === 'secondary') {
@@ -50,7 +50,7 @@ export const Button: React.FC<ButtonProps> = ({
     } else if (variant === 'outline') {
       baseStyle.push(styles.outlineText);
     }
-    
+
     return baseStyle;
   };
 

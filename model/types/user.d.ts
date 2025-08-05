@@ -1,8 +1,5 @@
 import type { Document } from 'mongoose';
-import {
-  EGenderType,
-  ERoleType
-} from '../../types/enums';
+import { EGenderType, ERoleType } from '../../types/enums';
 import type { IAwsFileSchema } from '../index';
 
 export interface IUserInput {

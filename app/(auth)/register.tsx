@@ -1,13 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { Link, router } from 'expo-router';
 import { useAuth } from '../../context/AuthContext';
@@ -37,33 +29,22 @@ export default function RegisterScreen() {
 
   const password = watch('password');
 
-  const onSubmit = async (
-    data: RegisterRequest & { confirmPassword: string }
-  ) => {
+  const onSubmit = async (data: RegisterRequest & { confirmPassword: string }) => {
     try {
       setIsSubmitting(true);
       const { confirmPassword, ...registerData } = data;
       await registerUser(registerData);
       router.replace('/(tabs)');
     } catch (error: any) {
-      Alert.alert(
-        'Registration Failed',
-        error.message || 'An error occurred during registration'
-      );
+      Alert.alert('Registration Failed', error.message || 'An error occurred during registration');
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
+    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
           <Text style={styles.title}>Create Account</Text>
           <Text style={styles.subtitle}>Join Field Utility Tracker today</Text>
@@ -169,8 +150,7 @@ export default function RegisterScreen() {
             control={control}
             rules={{
               required: 'Please confirm your password',
-              validate: (value) =>
-                value === password || 'Passwords do not match',
+              validate: value => value === password || 'Passwords do not match',
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <Input

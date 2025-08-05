@@ -1,0 +1,15 @@
+export default {
+  $schema: 'http://json.schemastore.org/prettierrc',
+  tabWidth: 2,
+  useTabs: false,
+  printWidth: 120,
+  semi: true,
+  singleQuote: true,
+  bracketSpacing: true,
+  trailingComma: 'es5',
+  quoteProps: 'consistent',
+  arrowParens: 'avoid',
+  htmlWhitespaceSensitivity: 'strict',
+  embeddedLanguageFormatting: 'auto',
+  endOfLine: 'auto',
+};

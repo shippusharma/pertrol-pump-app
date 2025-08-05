@@ -16,7 +16,7 @@ export const configs = Object.freeze({
   },
 
   db: {
-    mongodb: { uri: process.env.MONGODB_URI  as string},
+    mongodb: { uri: process.env.MONGODB_URI as string },
   },
 });
 

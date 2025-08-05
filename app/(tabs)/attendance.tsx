@@ -1,7 +1,7 @@
 import * as Location from 'expo-location';
 import { CircleCheck as CheckCircle, Clock, MapPin, Circle as XCircle } from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
-import { Alert, ScrollView, StyleSheet, Text, View, } from 'react-native';
+import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Button } from '../../components/Button';
 import { Card } from '../../components/Card';
 
@@ -31,8 +31,6 @@ export default function AttendanceScreen() {
   const [attendanceEntries, setAttendanceEntries] = useState<AttendanceEntry[]>([]);
   const [lastAction, setLastAction] = useState<'check-in' | 'check-out' | null>(null);
 
-
-
   useEffect(() => {
     getCurrentLocation();
     loadAttendanceHistory();
@@ -41,7 +39,7 @@ export default function AttendanceScreen() {
   const getCurrentLocation = async () => {
     try {
       setIsLoadingLocation(true);
-      
+
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         Alert.alert('Permission Denied', 'Location permission is required for attendance tracking.');
@@ -97,8 +95,7 @@ export default function AttendanceScreen() {
     const Δφ = ((lat2 - lat1) * Math.PI) / 180;
     const Δλ = ((lon2 - lon1) * Math.PI) / 180;
 
-    const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-             Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
     return R * c;
@@ -106,7 +103,7 @@ export default function AttendanceScreen() {
 
   const isWithinGeofence = (): boolean => {
     if (!location) return false;
-    
+
     const distance = calculateDistance(
       location.latitude,
       location.longitude,
@@ -124,14 +121,10 @@ export default function AttendanceScreen() {
     }
 
     if (!isWithinGeofence()) {
-      Alert.alert(
-        'Outside Geofence',
-        'You must be within the office premises to mark attendance.',
-        [
-          { text: 'OK', style: 'default' },
-          { text: 'Refresh Location', onPress: getCurrentLocation },
-        ]
-      );
+      Alert.alert('Outside Geofence', 'You must be within the office premises to mark attendance.', [
+        { text: 'OK', style: 'default' },
+        { text: 'Refresh Location', onPress: getCurrentLocation },
+      ]);
       return;
     }
 
@@ -207,9 +200,7 @@ export default function AttendanceScreen() {
           <Clock size={20} color="#F59E0B" />
           <Text style={styles.actionTitle}>Mark Attendance</Text>
         </View>
-        <Text style={styles.actionSubtitle}>
-          Current time: {new Date().toLocaleTimeString()}
-        </Text>
+        <Text style={styles.actionSubtitle}>Current time: {new Date().toLocaleTimeString()}</Text>
         <Button
           title={`${getNextAction() === 'check-in' ? 'Check In' : 'Check Out'}`}
           onPress={() => handleAttendanceAction(getNextAction())}
@@ -224,7 +215,7 @@ export default function AttendanceScreen() {
         {attendanceEntries.length === 0 ? (
           <Text style={styles.emptyText}>No attendance records for today</Text>
         ) : (
-          attendanceEntries.map((entry) => (
+          attendanceEntries.map(entry => (
             <View key={entry.id} style={styles.entryItem}>
               <View style={styles.entryIcon}>
                 {entry.type === 'check-in' ? (
@@ -234,15 +225,11 @@ export default function AttendanceScreen() {
                 )}
               </View>
               <View style={styles.entryContent}>
-                <Text style={styles.entryType}>
-                  {entry.type === 'check-in' ? 'Checked In' : 'Checked Out'}
-                </Text>
+                <Text style={styles.entryType}>{entry.type === 'check-in' ? 'Checked In' : 'Checked Out'}</Text>
                 <Text style={styles.entryTime}>
                   {formatTime(entry.timestamp)} • {formatDate(entry.timestamp)}
                 </Text>
-                <Text style={styles.entryLocation}>
-                  {entry.location.address || 'Location not available'}
-                </Text>
+                <Text style={styles.entryLocation}>{entry.location.address || 'Location not available'}</Text>
               </View>
             </View>
           ))

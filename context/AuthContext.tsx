@@ -1,13 +1,7 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { router } from 'expo-router';
 import { authService } from '../services/auth';
-import {
-  AuthState,
-  User,
-  AuthTokens,
-  LoginRequest,
-  RegisterRequest,
-} from '../types/auth';
+import { AuthState, User, AuthTokens, LoginRequest, RegisterRequest } from '../types/auth';
 
 interface AuthContextType extends AuthState {
   login: (credentials: LoginRequest) => Promise<void>;
@@ -40,9 +34,7 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
 
 const initialState: AuthState = { isLoading: false, user: null, tokens: null };
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   useEffect(() => {

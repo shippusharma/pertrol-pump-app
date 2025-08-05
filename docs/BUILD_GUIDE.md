@@ -22,6 +22,7 @@ npx expo eject
 ```
 
 This will:
+
 - Create `android/` and `ios/` directories
 - Switch your project to the **bare workflow**
 - Install `react-native` and native dependencies
@@ -118,6 +119,7 @@ open ios/YourApp.xcworkspace
 ### 📤 C. Export `.ipa` from Organizer
 
 After archiving:
+
 1. Open Organizer (auto-pops)
 2. Click "Distribute App"
 3. Choose "App Store Connect" or "Export for Ad Hoc"
@@ -156,11 +158,11 @@ xcodebuild clean
 
 ## ✅ Summary
 
-| Platform | Output Type | Build Command |
-|----------|-------------|----------------|
+| Platform | Output Type | Build Command               |
+| -------- | ----------- | --------------------------- |
 | Android  | `.apk`      | `./gradlew assembleRelease` |
-| Android  | `.aab`      | `./gradlew bundleRelease` |
-| iOS      | `.ipa`      | Archive via Xcode |
+| Android  | `.aab`      | `./gradlew bundleRelease`   |
+| iOS      | `.ipa`      | Archive via Xcode           |
 
 ---
 

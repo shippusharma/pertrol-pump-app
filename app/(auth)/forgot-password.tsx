@@ -1,13 +1,6 @@
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import {
-  Alert,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 export default function ForgotPasswordScreen() {
   const [email, setEmail] = useState('');
@@ -19,19 +12,14 @@ export default function ForgotPasswordScreen() {
     }
 
     // Trigger forgot password flow (API call)
-    Alert.alert(
-      'Reset Link Sent',
-      `Check your email (${email}) for reset instructions.`
-    );
+    Alert.alert('Reset Link Sent', `Check your email (${email}) for reset instructions.`);
     router.replace('/reset-password');
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Forgot Password?</Text>
-      <Text style={styles.subtext}>
-        Enter your email to receive a reset link.
-      </Text>
+      <Text style={styles.subtext}>Enter your email to receive a reset link.</Text>
 
       <TextInput
         placeholder="Enter your email"

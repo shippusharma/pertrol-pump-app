@@ -23,17 +23,17 @@ export const Input: React.FC<InputProps> = ({
 
   const getInputStyle = () => {
     const baseStyle = [styles.input, styles[size]];
-    
+
     if (variant === 'filled') {
       baseStyle.push(styles.filled);
     } else {
       baseStyle.push(styles.bordered);
     }
-    
+
     if (error) {
       baseStyle.push(styles.error);
     }
-    
+
     return baseStyle;
   };
 
@@ -48,15 +48,8 @@ export const Input: React.FC<InputProps> = ({
           {...props}
         />
         {isPassword && (
-          <TouchableOpacity
-            style={styles.eyeIcon}
-            onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-          >
-            {isPasswordVisible ? (
-              <EyeOff size={20} color="#94A3B8" />
-            ) : (
-              <Eye size={20} color="#94A3B8" />
-            )}
+          <TouchableOpacity style={styles.eyeIcon} onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
+            {isPasswordVisible ? <EyeOff size={20} color="#94A3B8" /> : <Eye size={20} color="#94A3B8" />}
           </TouchableOpacity>
         )}
       </View>

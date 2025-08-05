@@ -114,7 +114,7 @@ export default function FuelMonitorScreen() {
       };
 
       setFuelHistory(prev => [newEntry, ...prev]);
-      
+
       // Reset form
       setFuelAmount('');
       setDensity('');
@@ -130,14 +130,10 @@ export default function FuelMonitorScreen() {
   };
 
   const showImagePicker = () => {
-    Alert.alert(
-      'Add Photo',
-      'Choose how you want to add a photo',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Take Photo', onPress: takePhoto },
-      ]
-    );
+    Alert.alert('Add Photo', 'Choose how you want to add a photo', [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Take Photo', onPress: takePhoto },
+    ]);
   };
 
   return (
@@ -177,7 +173,7 @@ export default function FuelMonitorScreen() {
           keyboardType="numeric"
           variant="filled"
         />
-        
+
         <Input
           label="Density"
           placeholder="Enter density"
@@ -216,18 +212,13 @@ export default function FuelMonitorScreen() {
 
       {/* Submit Button */}
       <View style={styles.submitContainer}>
-        <Button
-          title="Submit"
-          onPress={handleSubmit}
-          loading={isSubmitting}
-          style={styles.submitButton}
-        />
+        <Button title="Submit" onPress={handleSubmit} loading={isSubmitting} style={styles.submitButton} />
       </View>
 
       {/* Fuel History */}
       <Card style={styles.historyCard}>
         <Text style={styles.sectionTitle}>Fuel History</Text>
-        {fuelHistory.map((entry) => (
+        {fuelHistory.map(entry => (
           <View key={entry.id} style={styles.historyItem}>
             <View style={styles.historyIcon}>
               {entry.type === 'refill' ? (
@@ -237,21 +228,15 @@ export default function FuelMonitorScreen() {
               )}
             </View>
             <View style={styles.historyContent}>
-              <Text style={styles.historyType}>
-                {entry.type === 'refill' ? 'Fuel Refill' : 'Fuel Consumption'}
-              </Text>
+              <Text style={styles.historyType}>{entry.type === 'refill' ? 'Fuel Refill' : 'Fuel Consumption'}</Text>
               <Text style={styles.historyDate}>
                 {entry.timestamp.toLocaleDateString()} • {entry.fuelInLiters}L
               </Text>
-              {entry.notes && (
-                <Text style={styles.historyNotes}>{entry.notes}</Text>
-              )}
+              {entry.notes && <Text style={styles.historyNotes}>{entry.notes}</Text>}
             </View>
-            <Text style={[
-              styles.historyAmount,
-              { color: entry.type === 'refill' ? '#10B981' : '#EF4444' }
-            ]}>
-              {entry.type === 'refill' ? '+' : '-'}{entry.fuelInLiters}L
+            <Text style={[styles.historyAmount, { color: entry.type === 'refill' ? '#10B981' : '#EF4444' }]}>
+              {entry.type === 'refill' ? '+' : '-'}
+              {entry.fuelInLiters}L
             </Text>
           </View>
         ))}
