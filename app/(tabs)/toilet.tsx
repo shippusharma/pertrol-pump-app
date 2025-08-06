@@ -58,8 +58,10 @@ export default function ToiletCheckScreen() {
         setSelectedImage(result.assets[0].uri);
       }
     } catch (error) {
-      console.error('Error taking photo:', error);
-      Alert.alert('Error', 'Failed to take photo. Please try again.');
+      if (error instanceof Error) {
+        return Alert.alert('Error', 'Failed to take photo. Please try again.');
+      }
+      throw error;
     }
   };
 
@@ -82,8 +84,10 @@ export default function ToiletCheckScreen() {
         setSelectedImage(result.assets[0].uri);
       }
     } catch (error) {
-      console.error('Error picking image:', error);
-      Alert.alert('Error', 'Failed to select image. Please try again.');
+      if (error instanceof Error) {
+        return Alert.alert('Error', 'Failed to take photo. Please try again.');
+      }
+      throw error;
     }
   };
 
@@ -119,8 +123,10 @@ export default function ToiletCheckScreen() {
 
       Alert.alert('Success', 'Toilet check submitted successfully!');
     } catch (error) {
-      console.error('Error submitting toilet check:', error);
-      Alert.alert('Error', 'Failed to submit toilet check. Please try again.');
+      if (error instanceof Error) {
+        return Alert.alert('Error', 'Failed to take photo. Please try again.');
+      }
+      throw error;
     } finally {
       setIsSubmitting(false);
     }

@@ -1,7 +1,8 @@
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { router } from 'expo-router';
+import React, { createContext, useContext, useEffect, useReducer } from 'react';
+import { Alert } from 'react-native';
 import { authService } from '../services/auth';
-import { AuthState, User, AuthTokens, LoginRequest, RegisterRequest } from '../types/auth';
+import { AuthState, AuthTokens, LoginRequest, RegisterRequest, User } from '../types/auth';
 
 interface AuthContextType extends AuthState {
   login: (credentials: LoginRequest) => Promise<void>;
@@ -51,6 +52,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         dispatch({ type: 'SET_USER', payload: user });
       }
     } catch (error) {
+      if (error instanceof Error) {
+        return Alert.alert('Error', 'Failed to take photo. Please try again.');
+      }
       throw error;
     } finally {
       dispatch({ type: 'LOADING', payload: false });
@@ -64,6 +68,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       dispatch({ type: 'SET_USER', payload: user });
       dispatch({ type: 'SET_TOKENS', payload: tokens });
     } catch (error) {
+      if (error instanceof Error) {
+        return Alert.alert('Error', 'Failed to take photo. Please try again.');
+      }
       throw error;
     } finally {
       dispatch({ type: 'LOADING', payload: false });
@@ -77,6 +84,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       dispatch({ type: 'SET_USER', payload: user });
       dispatch({ type: 'SET_TOKENS', payload: tokens });
     } catch (error) {
+      if (error instanceof Error) {
+        return Alert.alert('Error', 'Failed to take photo. Please try again.');
+      }
       throw error;
     } finally {
       dispatch({ type: 'LOADING', payload: false });
@@ -89,6 +99,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       await authService.logout();
       router.replace('/login');
     } catch (error) {
+      if (error instanceof Error) {
+        return Alert.alert('Error', 'Failed to take photo. Please try again.');
+      }
       throw error;
     } finally {
       dispatch({ type: 'LOADING', payload: false });
@@ -101,6 +114,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const user = await authService.getCurrentUser();
       dispatch({ type: 'SET_USER', payload: user });
     } catch (error) {
+      if (error instanceof Error) {
+        return Alert.alert('Error', 'Failed to take photo. Please try again.');
+      }
       throw error;
     } finally {
       dispatch({ type: 'LOADING', payload: false });

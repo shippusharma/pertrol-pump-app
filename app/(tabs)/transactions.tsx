@@ -109,8 +109,10 @@ export default function TransactionsScreen() {
 
       Alert.alert('Success', 'Transaction added successfully!');
     } catch (error) {
-      console.error('Error adding transaction:', error);
-      Alert.alert('Error', 'Failed to add transaction. Please try again.');
+      if (error instanceof Error) {
+        return Alert.alert('Error', 'Failed to take photo. Please try again.');
+      }
+      throw error;
     } finally {
       setIsSubmitting(false);
     }

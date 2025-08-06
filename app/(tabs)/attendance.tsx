@@ -63,8 +63,10 @@ export default function AttendanceScreen() {
 
       setLocation(locationData);
     } catch (error) {
-      console.error('Error getting location:', error);
-      Alert.alert('Location Error', 'Unable to get current location. Please try again.');
+      if (error instanceof Error) {
+        return Alert.alert('Location Error', 'Unable to get current location. Please try again.');
+      }
+      throw error;
     } finally {
       setIsLoadingLocation(false);
     }

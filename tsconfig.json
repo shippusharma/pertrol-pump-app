@@ -8,5 +8,29 @@
     }
   },
   "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts", "nativewind-env.d.ts", "global.d.ts"],
-  "exclude": ["android", "ios"]
+  "exclude": [
+    ".expo",
+    "android",
+    "ios",
+    "node_modules",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "__tests__",
+    "tsconfig.tsbuildinfo",
+    "build",
+    "dist",
+    "out",
+    "logs",
+    ".husky",
+    ".vscode",
+    ".idea",
+    ".turbo",
+    ".serverless",
+    "public",
+    "uploads",
+    "loadtest.mjs",
+    "autocannonWithMonitoring.mjs",
+    "**/*handler.ts",
+    "**/*lambda/**/*"
+  ]
 }

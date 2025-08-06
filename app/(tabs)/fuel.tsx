@@ -72,8 +72,10 @@ export default function FuelMonitorScreen() {
         setSelectedImage(result.assets[0].uri);
       }
     } catch (error) {
-      console.error('Error taking photo:', error);
-      Alert.alert('Error', 'Failed to take photo. Please try again.');
+      if (error instanceof Error) {
+        return Alert.alert('Error', 'Failed to take photo. Please try again.');
+      }
+      throw error;
     }
   };
 
@@ -122,8 +124,10 @@ export default function FuelMonitorScreen() {
 
       Alert.alert('Success', 'Fuel record submitted successfully!');
     } catch (error) {
-      console.error('Error submitting fuel record:', error);
-      Alert.alert('Error', 'Failed to submit fuel record. Please try again.');
+      if (error instanceof Error) {
+        return Alert.alert('Error', 'Failed to submit fuel record. Please try again.');
+      }
+      throw error;
     } finally {
       setIsSubmitting(false);
     }
