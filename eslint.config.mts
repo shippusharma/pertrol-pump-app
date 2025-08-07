@@ -48,6 +48,7 @@ export default defineConfig([
 
   {
     ignores: [
+      'expo-env.d.ts',
       'dist/*', // Build output directory
       'android/', // Android native project files
       'ios/', // iOS native project files

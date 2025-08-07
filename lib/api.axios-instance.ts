@@ -1,11 +1,7 @@
-/* eslint-disable */
+import { serverWithApiVersion } from '@/configs/env';
 import axios, { type AxiosError, type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios';
 import * as SecureStore from 'expo-secure-store'; // For secure token storage
-// import { serverUrlWithApiVersion } from '@/configs'; // Import server URL configuration
 
-const serverUrlWithApiVersion = 'https://02tpvo4tpb.execute-api.ap-south-1.amazonaws.com/staging/auth-service/api/v1';
-
-// Extend AxiosRequestConfig with optional _retry flag for token refresh tracking
 interface InternalAxiosRequestConfig extends AxiosRequestConfig {
   _retry?: boolean;
 }
@@ -15,12 +11,12 @@ export class ApiInstance {
   private axiosInstance: AxiosInstance; // Axios instance for HTTP requests
   private abortController: AbortController; // Controller for aborting requests
   private isRefreshing: boolean; // Flag to track if token refresh is in progress
-  private failedQueue: Array<{
+  private failedQueue: {
     // Queue for failed requests during token refresh
     resolve: (value?: unknown) => void;
     reject: (error: AxiosError) => void;
     config: InternalAxiosRequestConfig;
-  }>;
+  }[];
 
   // Constructor initializes the API service with base URL and login URL
   constructor(
@@ -215,6 +211,7 @@ export class ApiInstance {
       });
       return response.data; // Return response data
     } catch (error) {
+      // eslint-disable-next-line import/no-named-as-default-member
       if (axios.isCancel(error)) {
         return Promise.reject({}); // Handle request cancellation
       }
@@ -279,7 +276,7 @@ export class ApiInstance {
   }
 }
 
-export const apiInstance = new ApiInstance(serverUrlWithApiVersion);
+export const apiInstance = new ApiInstance(serverWithApiVersion);
 
 /**
 //! Cleanup function to abort the request when the component unmounts

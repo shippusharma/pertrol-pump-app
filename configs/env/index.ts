@@ -1,7 +1,9 @@
+import 'dotenv/config';
+
 export const configs = Object.freeze({
   nodeEnv: process.env.NODE_ENV,
   isProduction: process.env.NODE_ENV === 'production',
-  appName: process.env.APP_NAME as string,
+  appName: process.env.EXPO_PUBLIC_APP_NAME as string,
 
   baseUrl: {
     client: process.env.CLIENT_BASE_URL as string,
@@ -16,7 +18,7 @@ export const configs = Object.freeze({
   },
 
   db: {
-    mongodb: { uri: process.env.MONGODB_URI as string },
+    mongodb: { uri: process.env.MONGODB_DATABASE_URI as string },
   },
 });
 
