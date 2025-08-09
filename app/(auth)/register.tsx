@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Alert, KeyboardAvoidingView, Platform } from 'react-native';
-import { useForm, Controller } from 'react-hook-form';
 import { Link, router } from 'expo-router';
-import { useAuth } from '../../context/AuthContext';
+import React, { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Button } from '../../components/Button';
-import { Input } from '../../components/Input';
 import { Card } from '../../components/Card';
+import { Input } from '../../components/Input';
+import { useAuth } from '../../context/AuthContext';
 import { RegisterRequest } from '../../types/auth';
 
 export default function RegisterScreen() {
@@ -18,13 +18,7 @@ export default function RegisterScreen() {
     formState: { errors },
     watch,
   } = useForm<RegisterRequest & { confirmPassword: string }>({
-    defaultValues: {
-      name: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      phoneNumber: '',
-    },
+    defaultValues: { name: '', email: '', phoneNumber: '', password: '', confirmPassword: '' },
   });
 
   const password = watch('password');
@@ -102,6 +96,7 @@ export default function RegisterScreen() {
           <Controller
             control={control}
             rules={{
+              required: 'Phone number is required',
               pattern: {
                 value: /^\+?[\d\s-()]+$/,
                 message: 'Please enter a valid phone number',
@@ -109,7 +104,7 @@ export default function RegisterScreen() {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <Input
-                label="Phone Number (Optional)"
+                label="Phone Number"
                 placeholder="Enter your phone number"
                 value={value}
                 onBlur={onBlur}

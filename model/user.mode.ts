@@ -28,12 +28,13 @@ const userSchema = new Schema<IUserSchema>(
     name: { type: String, required: true, lowercase: true, trim: true, message: 'Name is required' },
     email: {
       type: String,
-      index: true,
+      unique: true,
       lowercase: true,
+      required: [true, 'Email is required'],
       minlength: [6, 'Email must be at least 6 characters long'],
       maxlength: [40, 'Email must be at most 40 characters long'],
     },
-    phone_number: {
+    phoneNumber: {
       type: String,
       unique: true,
       required: [true, 'Phone number is required'],

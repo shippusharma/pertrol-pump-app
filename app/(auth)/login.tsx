@@ -19,6 +19,7 @@ export default function LoginScreen() {
   } = useForm<LoginRequest>({
     defaultValues: {
       email: '',
+      // phoneNumber: '',
       password: '',
     },
   });

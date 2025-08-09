@@ -18,7 +18,14 @@ export const configs = Object.freeze({
   },
 
   db: {
-    mongodb: { uri: process.env.MONGODB_DATABASE_URI as string },
+    uri: process.env.MONGODB_DATABASE_URI as string,
+  },
+
+  email: {
+    host: process.env.SMTP_HOST as string,
+    port: Number(process.env.SMTP_PORT ?? 587),
+    user: process.env.SMTP_USER as string,
+    password: process.env.SMTP_PASSWORD as string,
   },
 });
 

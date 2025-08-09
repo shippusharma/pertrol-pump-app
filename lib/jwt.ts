@@ -1,5 +1,5 @@
-import { IUserSchema } from '@/model/types/user';
-import jwt from 'jsonwebtoken';
+import type { IUserSchema } from '@/model/types/user';
+import Jwt from 'jsonwebtoken';
 import { ETokenExpiration } from '../types/enums';
 
 interface ITokens {
@@ -7,7 +7,7 @@ interface ITokens {
   refreshToken: string;
 }
 
-class JWTHelper {
+class JsonWebToken {
   constructor(
     private readonly accessTokenSecret: string,
     private readonly refreshTokenSecret: string
@@ -17,16 +17,16 @@ class JWTHelper {
   }
 
   static get jwt() {
-    return jwt;
+    return Jwt;
   }
 
-  generateShortToken<T extends object>(payload: T, secret: string, expiresIn: jwt.SignOptions['expiresIn']): string {
-    return jwt.sign(payload, `${secret}-${this.accessTokenSecret}`, { expiresIn });
+  generateShortToken<T extends object>(payload: T, secret: string, expiresIn: Jwt.SignOptions['expiresIn']): string {
+    return Jwt.sign(payload, `${secret}-${this.accessTokenSecret}`, { expiresIn });
   }
 
   verifyShortToken<T extends object>(token: string, secret: string): T | null {
     try {
-      return jwt.verify(token, `${secret}-${this.accessTokenSecret}`) as T;
+      return Jwt.verify(token, `${secret}-${this.accessTokenSecret}`) as T;
       // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
     } catch (error) {
       return null;
@@ -35,13 +35,13 @@ class JWTHelper {
 
   //------------------------------------------------------------------------------------------
 
-  private generateToken({ _id, role }: IUserSchema, secret: string, expiresIn: jwt.SignOptions['expiresIn']): string {
-    return jwt.sign({ _id, role }, secret, { expiresIn });
+  private generateToken({ _id, role }: IUserSchema, secret: string, expiresIn: Jwt.SignOptions['expiresIn']): string {
+    return Jwt.sign({ _id, role }, secret, { expiresIn });
   }
 
   private verifyToken(token: string, secret: string): IUserSchema | null {
     try {
-      return jwt.verify(token, secret) as IUserSchema;
+      return Jwt.verify(token, secret) as IUserSchema;
       // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
     } catch (error) {
       return null;
@@ -84,4 +84,4 @@ class JWTHelper {
   }
 }
 
-export const Jwt = new JWTHelper('accessTokenSecret', 'refreshTokenSecret');
+export const jwt = new JsonWebToken('accessTokenSecret', 'refreshTokenSecret');

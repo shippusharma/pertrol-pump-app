@@ -26,7 +26,12 @@
       "favicon": "./assets/images/pump.png"
     },
     "plugins": [
-      "expo-router",
+      [
+        "expo-router",
+        {
+          "origin": "http://localhost:8081/api" // for backend api
+        }
+      ],
       [
         "expo-splash-screen",
         {

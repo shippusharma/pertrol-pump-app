@@ -38,4 +38,10 @@ export const configs = Object.freeze({
   db: {
     mongodb: { uri: parsed.data.mongoUri },
   },
+
+  email: {
+    secretToken: parsed.data.secretToken,
+    accessTokenSecret: parsed.data.accessTokenSecret,
+    refreshTokenSecret: parsed.data.refreshTokenSecret,
+  },
 });

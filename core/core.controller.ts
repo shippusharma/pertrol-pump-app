@@ -1,3 +1,4 @@
+import { totalPages } from '@/utils/number.utils';
 import type { FilterQuery, Model } from 'mongoose';
 import type { IAggregatePagination, ICorePagination, IPaginationResponse } from './core';
 import CoreAuthToken from './core.auth-token';
@@ -8,14 +9,11 @@ class CoreController<T> extends CoreAuthToken {
     this.model = model;
   }
 
-  private readonly totalPages = (count: number, limit: number): number => Math.ceil((count || 1) / limit);
+  readonly ensureIndexes = async (): Promise<unknown> => await this.model.collection.indexes();
 
-  protected readonly ensureIndexes = async (): Promise<unknown> => await this.model.collection.indexes();
+  readonly createIndex = async (fieldName: string) => await this.model.collection.createIndex({ [fieldName]: 1 });
 
-  protected readonly createIndex = async (fieldName: string) =>
-    await this.model.collection.createIndex({ [fieldName]: 1 });
-
-  protected readonly dropIndex = async (fieldName: string) => await this.model.collection.dropIndex(fieldName);
+  readonly dropIndex = async (fieldName: string) => await this.model.collection.dropIndex(fieldName);
 
   /**
    **-------------------------------------------------------------
@@ -71,10 +69,10 @@ class CoreController<T> extends CoreAuthToken {
    **-------------------------------------------------------------
    */
 
-  protected readonly counts = async (): Promise<number> => await this.model.countDocuments();
+  readonly counts = async (): Promise<number> => await this.model.countDocuments();
 
   // pagination with filter and search
-  protected readonly pagination = async ({
+  readonly pagination = async ({
     page,
     limit,
     offset,
@@ -104,7 +102,7 @@ class CoreController<T> extends CoreAuthToken {
         .exec(), // for execute query
       this.model.countDocuments(query), // Total count (optional)
     ]);
-    const pages = this.totalPages(counts, limit);
+    const pages = totalPages(counts, limit);
     return {
       data,
       pagination: {
@@ -122,7 +120,7 @@ class CoreController<T> extends CoreAuthToken {
   };
 
   // Aggregate : filter and search with pagination
-  protected readonly paginationWithAggregate = async ({
+  readonly paginationWithAggregate = async ({
     page,
     limit,
     offset,
@@ -149,7 +147,7 @@ class CoreController<T> extends CoreAuthToken {
     ]);
 
     const counts: number = countResult.length > 0 ? countResult[0].total : 0;
-    const pages = this.totalPages(counts, limit);
+    const pages = totalPages(counts, limit);
     return {
       data,
       pagination: {
@@ -173,7 +171,7 @@ class CoreController<T> extends CoreAuthToken {
    */
 
   // Utility function to handle promises with error catching in a type-safe way
-  protected handleAsync = async <T>(promise: Promise<T>): Promise<[Error | null, T | null]> => {
+  handleAsync = async <T>(promise: Promise<T>): Promise<[Error | null, T | null]> => {
     try {
       const data = await promise;
       return [null, data];
@@ -183,7 +181,7 @@ class CoreController<T> extends CoreAuthToken {
   };
 
   // * Error handling wrapper for async route handlers
-  // protected tryCatchWrapper = (
+  // tryCatchWrapper = (
   //   fn: (
   //     req: Request,
   //     res: Response,
@@ -199,7 +197,7 @@ class CoreController<T> extends CoreAuthToken {
   //   };
   // };
 
-  // protected asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => Promise<void>) => {
+  // asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => Promise<void>) => {
   //   return function asyncUtilWrap(req: Request, res: Response, next: NextFunction): Promise<void> {
   //     return Promise.resolve(fn(req, res, next)).catch(next);
   //   };

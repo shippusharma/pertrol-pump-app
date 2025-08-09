@@ -50,11 +50,6 @@ const successMessages: Record<TSuccessStatusCode, string> = {
   202: ACCEPTED,
 };
 
-export function customErrorHandler(error: unknown, isLogger = false): Error {
-  const e = error instanceof Error ? error : new Error(String(error));
-  return e;
-}
-
 //----------------------------------------------------------------------------------------------------------------
 
 export function internalErrorResponse<T extends object = object>(error: unknown, others?: T) {

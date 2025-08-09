@@ -14,14 +14,15 @@ export interface AuthTokens {
 
 export interface LoginRequest {
   email: string;
+  // phoneNumber: '';
   password: string;
 }
 
 export interface RegisterRequest {
-  email: string;
-  password: string;
   name: string;
+  email: string;
   phoneNumber?: string;
+  password: string;
 }
 
 export interface AuthState {

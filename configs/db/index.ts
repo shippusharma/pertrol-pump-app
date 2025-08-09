@@ -1,7 +1,7 @@
 import { connect, Types } from 'mongoose';
 import { configs } from '../env';
 
-const uri = configs.db.mongodb.uri;
+const uri = configs.db.uri;
 
 //-----------------------------------------------------------------------------------------------------------------
 

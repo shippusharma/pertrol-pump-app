@@ -1,4 +1,4 @@
-import { Jwt as jwt } from '@/lib/jwt';
+import { jwt } from '@/lib/jwt';
 import { AuthTokenModel } from '@/model/auth-token.model';
 import { IAuthTokenSchema } from '@/model/types/auth-token';
 import { IUserSchema } from '@/model/types/user';
@@ -19,28 +19,41 @@ class CoreAuthToken {
   }
 
   // Finds a valid refresh token for a given user ID and refresh token value. Only returns a token if it has not expired.
-  protected readonly indValidRefreshToken = async (
-    userId: string,
-    refreshToken: string
-  ): Promise<IAuthTokenSchema | null> => {
+  readonly indValidRefreshToken = async (userId: string, refreshToken: string): Promise<IAuthTokenSchema | null> => {
     const token = await AuthTokenModel.findOne({ userId, refreshToken, expiresAt: { $gt: new Date() } }).exec();
     return token ?? null; // Only find tokens with future expiration dates
   };
 
   // Invalidates (deletes) all tokens associated with a specific user ID.
-  protected readonly invalidateTokens = async (userId: string): Promise<void> => {
+  readonly invalidateTokens = async (userId: string): Promise<void> => {
     await AuthTokenModel.deleteMany({ userId }).exec(); // Deletes all tokens for the user
   };
 
   // Cleans up all expired tokens from the database.
-  protected readonly cleanupExpiredTokens = async (): Promise<void> => {
+  readonly cleanupExpiredTokens = async (): Promise<void> => {
     await AuthTokenModel.deleteMany({ expiresAt: { $lte: new Date() } }).exec(); // Deletes expired tokens
   };
 
   // Set the expiration date (e.g., 7 days from now)
-  protected readonly expireDate = (expiresInSeconds = ETokenExpiration.REFRESH): Date => {
+  readonly expireDate = (expiresInSeconds = ETokenExpiration.REFRESH): Date => {
     const time = expiresInSeconds * 1000;
     return new Date(new Date().getTime() + time);
+  };
+
+  // ? -------------------------------------------<Auth-Token>-------------------------------------------------------
+
+  readonly deleteToken = async (refreshToken: string) => {
+    return AuthTokenModel.findOneAndDelete({ refreshToken });
+  };
+
+  readonly deleteAllTokens = async (userId: string): Promise<{ acknowledged: boolean; deletedCount: number }> => {
+    return AuthTokenModel.deleteMany({ userId });
+  };
+
+  readonly tokenSpliter = (REFRESH_TOKEN: string) => {
+    const refreshToken = REFRESH_TOKEN.split(' ')[1] as string;
+    if (refreshToken === '' || !String(REFRESH_TOKEN).toLowerCase().startsWith('bearer ')) return false;
+    return refreshToken;
   };
 
   /**
@@ -49,17 +62,17 @@ class CoreAuthToken {
    **-----------------------------------------------
    */
 
-  protected readonly accessToken = (res: Response, payload: IUserSchema): string => {
+  readonly accessToken = (payload: IUserSchema): string => {
     const accessToken = jwt.generateAccessToken(payload);
     return accessToken;
   };
 
-  protected readonly refreshToken = (res: Response, payload: IUserSchema): string => {
+  readonly refreshToken = (payload: IUserSchema): string => {
     const refreshToken = jwt.generateRefreshToken(payload);
     return refreshToken;
   };
 
-  protected readonly tokens = async (req: Request, res: Response, payload: IUserSchema): Promise<ITokens> => {
+  readonly tokens = async (payload: IUserSchema): Promise<ITokens> => {
     const { accessToken, refreshToken } = jwt.generateAccessAndRefreshTokens(payload);
     // Set the expiration date (e.g., 7 days from now)
     const expiresAt = new Date(new Date().getTime() + ETokenExpiration.REFRESH * 1000);

@@ -16,8 +16,8 @@ export interface IUserInput {
 
   role: ERoleType;
   name: string;
-  email?: string;
-  phone_number: string;
+  email: string;
+  phoneNumber: string;
   password: string;
   avatar: IAwsFileSchema | null;
   gender?: EGenderType;
