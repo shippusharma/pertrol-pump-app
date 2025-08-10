@@ -1,3 +1,4 @@
+import { connectToDatabase } from '@/configs';
 import { convertIntoHash } from '@/lib/hashing';
 import { jwt } from '@/lib/jwt';
 import { UserModel } from '@/model/user.mode';
@@ -13,6 +14,7 @@ export async function POST(req: Request, res: Response) {
     if (!decodedToken) return errorResponse(400, `Invalid token`);
 
     const hash = convertIntoHash(password); // Hashing password
+    await connectToDatabase();
     await UserModel.findByIdAndUpdate(decodedToken._id, { password: hash }, { new: true });
 
     return sendResponse(200, 'Password reset successful');

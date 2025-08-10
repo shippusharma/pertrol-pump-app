@@ -1,6 +1,7 @@
+import { connectToDatabase } from '@/configs';
 import { CoreController } from '@/core';
 import { convertIntoHash } from '@/lib/hashing';
-import { IUserSchema } from '@/model/types/user';
+import type { IUserSchema } from '@/model/types/user';
 import { UserModel } from '@/model/user.mode';
 import { errorResponse, internalErrorResponse, sendResponse } from '@/utils/response-handlers';
 import { removeKeysFromPayload } from '@/utils/validate.utils';
@@ -14,6 +15,7 @@ export async function POST(req: Request, res: Response) {
     if (!phoneNumber) return errorResponse(400, 'Phone number is required.');
     if (!password) return errorResponse(400, 'Password is required.');
 
+    await connectToDatabase();
     const oldUser = await UserModel.findOne({ $or: [{ email }, { phoneNumber }] }).exec();
     if (oldUser) return errorResponse(400, 'Email or phone number already available.');
 

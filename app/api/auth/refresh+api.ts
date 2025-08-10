@@ -1,3 +1,4 @@
+import { connectToDatabase } from '@/configs';
 import { CoreAuthToken } from '@/core';
 import { jwt } from '@/lib/jwt';
 import { AuthTokenModel } from '@/model/auth-token.model';
@@ -9,6 +10,7 @@ export async function POST(req: Request, res: Request) {
     const { authorization: REFRESH_TOKEN } = await req.json();
     if (!REFRESH_TOKEN) return errorResponse(400, 'Refresh token is required.');
 
+    await connectToDatabase();
     const coreAuth = new CoreAuthToken();
     const refreshToken = coreAuth.tokenSpliter(REFRESH_TOKEN);
     if (!refreshToken) return errorResponse(401);

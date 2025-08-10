@@ -9,14 +9,15 @@ export const enum ETokenExpiration {
 // ------------------------------------<Basic Types>-------------------------------------------
 
 export enum ERoleType {
-  ADMIN = 'admin',
+  ANONYMOUS = 'anonymous',
+  ROOT = 'root',
   USER = 'user',
 }
 
 export enum EGenderType {
   MALE = 'male',
   FEMALE = 'female',
-  ALL = 'all',
+  OTHER = 'other',
 }
 
 export enum EAuthProviderType {

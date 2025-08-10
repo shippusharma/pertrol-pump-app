@@ -1,3 +1,4 @@
+import { connectToDatabase } from '@/configs';
 import { INVALID_CREDENTIAL } from '@/constants';
 import { convertIntoHash } from '@/lib/hashing';
 import { jwt } from '@/lib/jwt';
@@ -12,6 +13,7 @@ export async function POST(req: Request, res: Response) {
     if (!email || !phoneNumber) return errorResponse(400, `Email or phone number is required.`);
     if (!password) return errorResponse(400, `Password is required.`);
 
+    await connectToDatabase();
     const payload = await UserModel.findOne({ $or: [{ email }, { phoneNumber }] }).exec();
     if (!payload) return errorResponse(400, INVALID_CREDENTIAL);
 

@@ -1,5 +1,5 @@
 interface IEnvVariables {
-  NODE_ENV: string;
+  NODE_ENV: 'production' | 'development';
 }
 
 declare global {
