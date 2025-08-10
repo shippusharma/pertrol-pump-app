@@ -29,7 +29,7 @@
       [
         "expo-router",
         {
-          "origin": "http://localhost:8081/api" // for backend api
+          "origin": "http://10.211.176.184:8081/api" // for backend api
         }
       ],
       [

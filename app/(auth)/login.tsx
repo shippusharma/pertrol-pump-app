@@ -17,11 +17,7 @@ export default function LoginScreen() {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginRequest>({
-    defaultValues: {
-      email: '',
-      // phoneNumber: '',
-      password: '',
-    },
+    defaultValues: { email: '', phoneNumber: '', password: '' },
   });
 
   const onSubmit = async (data: LoginRequest) => {

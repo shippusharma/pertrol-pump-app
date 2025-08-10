@@ -18,7 +18,6 @@ const AUTH_ENDPOINTS = {
 
 const USER_ENDPOINTS = {
   getAllUser: '/users',
-  getAllAdmin: '/admins',
   getAllRoot: '/roots',
   signup: '/users/singup',
 
@@ -39,17 +38,7 @@ const USER_ENDPOINTS = {
 export const endpoints = Object.freeze({
   home: '/',
   health: '/health',
-  docs: '/api/docs',
-  route_not_found: '*',
 
   auth: AUTH_ENDPOINTS,
   user: USER_ENDPOINTS,
-
-  contactUs: {
-    getAll: 'contact-us/data',
-    get: '/contact-us/:contactUsId',
-    create: '/contact-us/create',
-    delete: '/contact-us/:contactUsId/delete',
-    setSuccess: '/contact-us/:contactUsId/success',
-  },
 });

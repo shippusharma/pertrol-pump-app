@@ -1,31 +1,31 @@
-import 'dotenv/config';
+import Constants from 'expo-constants';
 
 export const configs = Object.freeze({
   nodeEnv: process.env.NODE_ENV,
   isProduction: process.env.NODE_ENV === 'production',
-  appName: process.env.EXPO_PUBLIC_APP_NAME as string,
+  appName: Constants.expoConfig?.extra?.appName,
 
   baseUrl: {
-    client: process.env.CLIENT_BASE_URL as string,
-    server: process.env.SERVER_BASE_URL as string,
-    apiVersion: process.env.API_VERSION as string,
+    client: Constants.expoConfig?.extra?.clientBaseUrl,
+    server: Constants.expoConfig?.extra?.serverBaseUrl,
+    apiVersion: Constants.expoConfig?.extra?.apiVersion,
   },
 
   secretAndToken: {
-    secretToken: process.env.SECRET_TOKEN as string,
-    accessTokenSecret: process.env.ACCESS_TOKEN_SECRET as string,
-    refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET as string,
+    secretToken: Constants.expoConfig?.extra?.secretToken,
+    accessTokenSecret: Constants.expoConfig?.extra?.accessTokenSecret,
+    refreshTokenSecret: Constants.expoConfig?.extra?.refreshTokenSecret,
   },
 
   db: {
-    uri: process.env.MONGODB_DATABASE_URI as string,
+    uri: Constants.expoConfig?.extra?.mongodbUri,
   },
 
   email: {
-    host: process.env.SMTP_HOST as string,
-    port: Number(process.env.SMTP_PORT ?? 587),
-    user: process.env.SMTP_USER as string,
-    password: process.env.SMTP_PASSWORD as string,
+    host: Constants.expoConfig?.extra?.smtpHost,
+    port: Number(Constants.expoConfig?.extra?.smtpPort || 587),
+    user: Constants.expoConfig?.extra?.smtpUser,
+    password: Constants.expoConfig?.extra?.smtpPassword,
   },
 });
 

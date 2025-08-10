@@ -8,6 +8,7 @@ export interface TEmailMessage {
   subject: string;
   text: string;
   html?: string;
+  // eslint-disable-next-line no-undef
   attachments?: { filename: string; content: Buffer | string; contentType: string }[];
 }
 

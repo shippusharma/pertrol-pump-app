@@ -1,8 +1,10 @@
+import { ERoleType } from './enums';
+
 export interface User {
   id: string;
   email: string;
   name: string;
-  role: 'admin' | 'staff' | 'manager';
+  role: ERoleType;
   phoneNumber?: string;
   avatar?: string;
 }
@@ -14,14 +16,14 @@ export interface AuthTokens {
 
 export interface LoginRequest {
   email: string;
-  // phoneNumber: '';
+  phoneNumber?: string;
   password: string;
 }
 
 export interface RegisterRequest {
   name: string;
   email: string;
-  phoneNumber?: string;
+  phoneNumber: string;
   password: string;
 }
 

@@ -63,34 +63,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (credentials: LoginRequest) => {
     dispatch({ type: 'LOADING', payload: true });
-    try {
-      const { user, tokens } = await authService.login(credentials);
-      dispatch({ type: 'SET_USER', payload: user });
-      dispatch({ type: 'SET_TOKENS', payload: tokens });
-    } catch (error) {
-      if (error instanceof Error) {
-        return Alert.alert('Error', 'Failed to take photo. Please try again.');
-      }
-      throw error;
-    } finally {
-      dispatch({ type: 'LOADING', payload: false });
-    }
+    const { user, tokens } = await authService.login(credentials);
+    dispatch({ type: 'SET_USER', payload: user });
+    dispatch({ type: 'SET_TOKENS', payload: tokens });
+    dispatch({ type: 'LOADING', payload: false });
   };
 
   const register = async (userData: RegisterRequest) => {
     dispatch({ type: 'LOADING', payload: true });
-    try {
-      const { user, tokens } = await authService.register(userData);
-      dispatch({ type: 'SET_USER', payload: user });
-      dispatch({ type: 'SET_TOKENS', payload: tokens });
-    } catch (error) {
-      if (error instanceof Error) {
-        return Alert.alert('Error', 'Failed to take photo. Please try again.');
-      }
-      throw error;
-    } finally {
-      dispatch({ type: 'LOADING', payload: false });
-    }
+    const { user, tokens } = await authService.register(userData);
+    dispatch({ type: 'SET_USER', payload: user });
+    dispatch({ type: 'SET_TOKENS', payload: tokens });
+    dispatch({ type: 'LOADING', payload: false });
   };
 
   const logout = async () => {
@@ -98,11 +82,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       await authService.logout();
       router.replace('/login');
-    } catch (error) {
-      if (error instanceof Error) {
-        return Alert.alert('Error', 'Failed to take photo. Please try again.');
-      }
-      throw error;
     } finally {
       dispatch({ type: 'LOADING', payload: false });
     }
@@ -113,11 +92,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const user = await authService.getCurrentUser();
       dispatch({ type: 'SET_USER', payload: user });
-    } catch (error) {
-      if (error instanceof Error) {
-        return Alert.alert('Error', 'Failed to take photo. Please try again.');
-      }
-      throw error;
     } finally {
       dispatch({ type: 'LOADING', payload: false });
     }

@@ -17,7 +17,7 @@ export const LoginSchema = z.object({
 export async function POST(req: Request, res: Response) {
   try {
     const { email, phoneNumber, password } = await req.json();
-    if (!email || !phoneNumber) return errorResponse(400, `Email or phone number is required.`);
+    if (!email && !phoneNumber) return errorResponse(400, `Email or phone number is required.`);
     if (!password) return errorResponse(400, `Password is required.`);
 
     await connectToDatabase();

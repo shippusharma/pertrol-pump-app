@@ -21,7 +21,7 @@ export class ApiInstance {
   // Constructor initializes the API service with base URL and login URL
   constructor(
     private readonly baseUrl: string,
-    private readonly loginUrl = '/login'
+    private readonly loginUrl = '/auth/login'
   ) {
     this.baseUrl = baseUrl; // Set base URL for API endpoints
     this.loginUrl = loginUrl; // Set login URL for redirects
@@ -29,7 +29,7 @@ export class ApiInstance {
     this.axiosInstance = axios.create({
       baseURL: this.baseUrl,
       headers: { 'Content-Type': 'application/json' },
-      timeout: 10000, // Increased timeout for mobile networks
+      // timeout: 10000, // Increased timeout for mobile networks
     });
 
     this.abortController = new AbortController(); // Initialize abort controller
