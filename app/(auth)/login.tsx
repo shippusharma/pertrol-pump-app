@@ -1,3 +1,6 @@
+import { IUserInput } from '@/model/types/user';
+import { useUserStore } from '@/store/user.store';
+import { IPayloadWithTokensResponse } from '@/types';
 import { Link, router } from 'expo-router';
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -5,30 +8,36 @@ import { Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, Vi
 import { Button } from '../../components/Button';
 import { Card } from '../../components/Card';
 import { Input } from '../../components/Input';
-import { useAuth } from '../../context/AuthContext';
+import { apiInstance } from '../../lib/api.axios-instance';
 import { LoginRequest } from '../../types/auth';
 
 export default function LoginScreen() {
-  const { login, isLoading } = useAuth();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { setUser } = useUserStore();
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginRequest>({
-    defaultValues: { email: '', phoneNumber: '', password: '' },
-  });
+  } = useForm<LoginRequest>({ defaultValues: { email: '', phoneNumber: '', password: '' } });
 
   const onSubmit = async (data: LoginRequest) => {
     try {
-      setIsSubmitting(true);
-      await login(data);
-      router.replace('/(tabs)');
+      setIsLoading(true);
+      const { status, message, success, payload } = await apiInstance.post<
+        IPayloadWithTokensResponse<Omit<IUserInput, 'password'>>
+      >('/auth/login', data);
+
+      if (success && status === 200) {
+        setUser(payload);
+        return router.replace('/(tabs)');
+      } else {
+        Alert.alert('Login Failed', message);
+      }
     } catch (error: any) {
       Alert.alert('Login Failed', error.message || 'An error occurred during login');
     } finally {
-      setIsSubmitting(false);
+      setIsLoading(false);
     }
   };
 
@@ -94,12 +103,7 @@ export default function LoginScreen() {
             forgot password
           </Link>
 
-          <Button
-            title="Sign In"
-            onPress={handleSubmit(onSubmit)}
-            loading={isSubmitting || isLoading}
-            style={styles.loginButton}
-          />
+          <Button title="Sign In" onPress={handleSubmit(onSubmit)} loading={isLoading} style={styles.loginButton} />
         </Card>
 
         <View style={styles.footer}>

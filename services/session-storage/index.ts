@@ -1,6 +1,6 @@
 import * as SecureStore from 'expo-secure-store'; // For secure token storage
 
-export const authStorage = {
+export const sessionStorage = {
   async getAccessToken() {
     return await SecureStore.getItemAsync('accessToken');
   },
@@ -42,5 +42,9 @@ export const authStorage = {
 
   async setRefreshToken(refreshToken: string) {
     await SecureStore.setItemAsync('refreshToken', refreshToken);
+  },
+
+  isTokenExpired(expiresAt: Date): boolean {
+    return new Date(expiresAt).getTime() < Date.now();
   },
 };

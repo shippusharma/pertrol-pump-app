@@ -1,6 +1,7 @@
 import { serverWithApiVersion } from '@/configs/env';
+import { sessionStorage } from '@/services/session-storage';
 import axios, { type AxiosError, type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios';
-import * as SecureStore from 'expo-secure-store'; // For secure token storage
+import { router } from 'expo-router';
 
 interface InternalAxiosRequestConfig extends AxiosRequestConfig {
   _retry?: boolean;
@@ -18,13 +19,12 @@ export class ApiInstance {
     config: InternalAxiosRequestConfig;
   }[];
 
+  private readonly loginScreen = '/login';
+  private readonly refreshEndpoint = '/auth/refresh';
+
   // Constructor initializes the API service with base URL and login URL
-  constructor(
-    private readonly baseUrl: string,
-    private readonly loginUrl = '/auth/login'
-  ) {
+  constructor(private readonly baseUrl: string) {
     this.baseUrl = baseUrl; // Set base URL for API endpoints
-    this.loginUrl = loginUrl; // Set login URL for redirects
     // Create axios instance with base configuration
     this.axiosInstance = axios.create({
       baseURL: this.baseUrl,
@@ -44,7 +44,7 @@ export class ApiInstance {
     this.axiosInstance.interceptors.request.use(
       async config => {
         // Get access token from secure storage
-        const accessToken = await SecureStore.getItemAsync('accessToken');
+        const accessToken = await sessionStorage.getAccessToken();
         // Add authorization header if token exists
         if (accessToken && config.headers) {
           config.headers.Authorization = `Bearer ${accessToken}`;
@@ -62,6 +62,9 @@ export class ApiInstance {
         const status = error.response?.status ?? 0; // Get HTTP status code
         const errorData = error.response?.data ?? ''; // Get error response data
 
+        // Prevent infinite loop if refresh request itself fails with 401
+        if (originalRequest.url === this.refreshEndpoint) return Promise.reject(error);
+
         // Check if error is due to session termination
         if (status === 401 && this.isSessionTerminatedError(errorData)) {
           await this.clearStoredCredentials(); // Clear stored credentials
@@ -70,10 +73,13 @@ export class ApiInstance {
 
         // Handle 401 errors (unauthorized) for token refresh
         if (status === 401 && !originalRequest._retry) {
-          if (!this.isRefreshing) {
-            return this.handleTokenRefresh(originalRequest); // Start token refresh
-          }
-          return this.queueRequest(originalRequest); // Queue request if refresh in progress
+          // If refresh is already happening → queue this request
+          if (this.isRefreshing) return this.queueRequest(originalRequest); // Start token refresh
+
+          // Mark refresh in progress before starting it
+          this.isRefreshing = true; // Set refresh flag
+          originalRequest._retry = true; // Mark request as retried
+          return this.handleTokenRefresh(originalRequest); // Queue request if refresh in progress
         }
         // For other errors, reject normally
         return Promise.reject(error);
@@ -92,8 +98,6 @@ export class ApiInstance {
    * Refresh the access token using the refresh token
    */
   private async handleTokenRefresh(originalRequest: InternalAxiosRequestConfig): Promise<AxiosResponse> {
-    this.isRefreshing = true; // Set refresh flag
-    originalRequest._retry = true; // Mark request as retried
     try {
       await this.refreshToken(); // Attempt token refresh
       this.processQueuedRequests(); // Process queued requests after refresh
@@ -122,12 +126,12 @@ export class ApiInstance {
 
   // Performs the actual token refresh request
   private async refreshToken(): Promise<void> {
-    const refreshToken = await SecureStore.getItemAsync('refreshToken'); // Get refresh token from secure storage
+    const refreshToken = await sessionStorage.getRefreshToken(); // Get refresh token from secure storage
     if (!refreshToken) throw new Error('No refresh token available'); // Validate token exists
     try {
       // Make refresh token request to server
       const response = await axios.post(
-        `${this.baseUrl}/auth/refresh`,
+        `${this.baseUrl}${this.refreshEndpoint}`,
         { authorization: `Bearer ${refreshToken}` },
         {
           headers: { 'Content-Type': 'application/json' },
@@ -150,10 +154,7 @@ export class ApiInstance {
   // Updates tokens in secure storage and axios headers
   private async updateTokens(accessToken: string, refreshToken: string): Promise<void> {
     // Store tokens in secure storage
-    await Promise.all([
-      SecureStore.setItemAsync('accessToken', accessToken),
-      SecureStore.setItemAsync('refreshToken', refreshToken),
-    ]);
+    await sessionStorage.setAuth(accessToken, refreshToken);
 
     // Update Redux store
     // store.dispatch(setAuth_({ accessToken, refreshToken }));
@@ -173,20 +174,28 @@ export class ApiInstance {
     this.failedQueue.forEach(prom => prom.reject(error)); // Reject all queued promises
     this.failedQueue = []; // Clear the queue
     this.clearStoredCredentials(); // Clear stored credentials
-    // In React Native, you would navigate to login screen instead of href
-    // This would be handled by your navigation system (e.g., React Navigation)
-    // navigation.navigate('Auth'); // Example using React Navigation
   }
 
   /**
    * Clear stored credentials by resetting Redux store and secure storage
    */
   private async clearStoredCredentials(): Promise<void> {
-    // Remove tokens from secure storage
-    await Promise.all([SecureStore.deleteItemAsync('accessToken'), SecureStore.deleteItemAsync('refreshToken')]);
-
     // Reset Redux store
     // resetReduxStoredData();
+
+    // Remove tokens from secure storage
+    await sessionStorage.deleteAuth();
+
+    // Cancel all pending requests from the old session
+    this.abortController.abort();
+    this.abortController = new AbortController();
+
+    // Clear any queued requests that are waiting for a refresh
+    this.failedQueue = [];
+    // Reset refreshing state
+    this.isRefreshing = false;
+
+    return router.replace(this.loginScreen);
   }
 
   // Generic request method for all HTTP methods
@@ -212,9 +221,7 @@ export class ApiInstance {
       return response.data; // Return response data
     } catch (error) {
       // eslint-disable-next-line import/no-named-as-default-member
-      if (axios.isCancel(error)) {
-        return Promise.reject({}); // Handle request cancellation
-      }
+      if (axios.isCancel(error)) return Promise.reject({}); // Handle request cancellation
       throw error; // Re-throw other errors
     }
   }
