@@ -24,9 +24,11 @@ export default function LoginScreen() {
   const onSubmit = async (data: LoginRequest) => {
     try {
       setIsLoading(true);
-      const { status, message, success, payload } = await apiInstance.post<
-        IPayloadWithTokensResponse<Omit<IUserInput, 'password'>>
-      >('/auth/login', data);
+      const response = await apiInstance.post<IPayloadWithTokensResponse<Omit<IUserInput, 'password'>>>(
+        '/auth/login',
+        data
+      );
+      const { status, message, success, payload } = response;
 
       if (success && status === 200) {
         setUser(payload);
@@ -35,7 +37,17 @@ export default function LoginScreen() {
         Alert.alert('Login Failed', message);
       }
     } catch (error: any) {
-      Alert.alert('Login Failed', error.message || 'An error occurred during login');
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        Alert.alert('Login Failed', error.response.data.message || 'An error occurred during login');
+      } else if (error.request) {
+        // The request was made but no response was received
+        Alert.alert('Login Failed', 'No response from server. Please check your network.');
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        Alert.alert('Login Failed', error.message || 'An error occurred during login');
+      }
     } finally {
       setIsLoading(false);
     }
