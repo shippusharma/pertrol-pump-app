@@ -16,10 +16,12 @@ export async function POST(req: Request, res: Request) {
     if (!refreshToken) return errorResponse(401);
 
     const decoded = jwt.verifyRefreshToken(refreshToken);
-    if (!decoded || decoded._id || !decoded.role) return errorResponse(401);
+    if (!decoded || decoded._id || !decoded.role) {
+      return errorResponse(401, `Session terminated`, { isSessionTerminated: true });
+    }
 
     const getToken = await AuthTokenModel.findOne({ refreshToken });
-    if (getToken == null) return errorResponse(401, `Session terminated`, { isSessionTerminated: true });
+    if (!getToken) return errorResponse(401, `Session terminated`, { isSessionTerminated: true });
 
     await coreAuth.deleteToken(refreshToken); // ? deleting old token
     const { accessToken, refreshToken: Refresh } = await coreAuth.tokens(decoded);

@@ -63,6 +63,7 @@ userSchema.pre<IUserSchema>('save', function (next) {
   this.password = convertIntoHash(this.password);
   next();
 });
+
 userSchema.methods.comparePassword = function (password: string): boolean {
   return comparingHash(password, this.password);
 };

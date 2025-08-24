@@ -1,13 +1,13 @@
 import { useFrameworkReady } from '@/hooks/useFrameworkReady';
+import { useUserStore } from '@/store/user.store';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { AuthProvider, useAuth } from '../context/AuthContext';
 
 function AppLayout() {
-  const { isAuthenticated } = useAuth();
+  const { isLoggedIn } = useUserStore();
 
   return (
     <Stack
@@ -22,7 +22,7 @@ function AppLayout() {
         },
       }}
     >
-      {!isAuthenticated ? (
+      {!isLoggedIn() ? (
         // Auth stack
         <Stack.Screen name="(auth)" />
       ) : (
@@ -42,15 +42,13 @@ export default function RootLayout() {
   useFrameworkReady();
 
   return (
-    <AuthProvider>
-      <SafeAreaView style={styles.safeArea}>
-        <SafeAreaProvider>
-          <AppLayout />
-          {/* <StatusBar style="auto" /> */}
-          <StatusBar style="dark" translucent={false} backgroundColor="#fff" />
-        </SafeAreaProvider>
-      </SafeAreaView>
-    </AuthProvider>
+    <SafeAreaView style={styles.safeArea}>
+      <SafeAreaProvider>
+        <AppLayout />
+        {/* <StatusBar style="auto" /> */}
+        <StatusBar style="dark" translucent={false} backgroundColor="#fff" />
+      </SafeAreaProvider>
+    </SafeAreaView>
   );
 }
 

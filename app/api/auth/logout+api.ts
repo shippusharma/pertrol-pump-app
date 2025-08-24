@@ -5,7 +5,7 @@ import { AuthTokenModel } from '@/model/auth-token.model';
 import { UserModel } from '@/model/user.mode';
 import { errorResponse, internalErrorResponse, sendResponse } from '@/utils/response-handlers';
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request, _res: Response) {
   try {
     const { authorization: REFRESH_TOKEN } = await req.json();
     if (!REFRESH_TOKEN) return errorResponse(400, 'Refresh token is required.');

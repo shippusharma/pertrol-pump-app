@@ -47,4 +47,9 @@ export const sessionStorage = {
   isTokenExpired(expiresAt: Date): boolean {
     return new Date(expiresAt).getTime() < Date.now();
   },
+
+  async isAuthenticated() {
+    const { accessToken, refreshToken } = await this.getAuth();
+    return accessToken && refreshToken;
+  },
 };

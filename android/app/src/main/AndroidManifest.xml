@@ -28,6 +28,7 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="petrolpumpapp"/>
+        <data android:scheme="petrol-pump-app"/>
       </intent-filter>
     </activity>
   </application>

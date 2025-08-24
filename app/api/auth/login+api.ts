@@ -1,7 +1,6 @@
 import { connectToDatabase } from '@/configs';
 import { INVALID_CREDENTIAL } from '@/constants';
 import { CoreController } from '@/core';
-import { comparingHash } from '@/lib/hashing';
 import type { IUserSchema } from '@/model/types/user';
 import { UserModel } from '@/model/user.mode';
 import { errorResponse, internalErrorResponse, sendResponse } from '@/utils/response-handlers';
@@ -22,10 +21,7 @@ export async function POST(req: Request, res: Response) {
 
     await connectToDatabase();
     const payload = await UserModel.findOne({ $or: [{ email }, { phoneNumber }] }).exec();
-    if (!payload) return errorResponse(400, INVALID_CREDENTIAL);
-    // comparing password with hashpassword
-    const isPasswordMatch = comparingHash(password, payload.password);
-    if (!isPasswordMatch) return errorResponse(400, INVALID_CREDENTIAL);
+    if (!payload || !payload.comparePassword(password)) return errorResponse(400, INVALID_CREDENTIAL);
 
     const coreController = new CoreController<IUserSchema>(UserModel);
     const { accessToken, refreshToken } = await coreController.tokens(payload);

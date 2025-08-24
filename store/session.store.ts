@@ -10,7 +10,7 @@ interface ISessionInput {
 
 interface ISessionState {
   session: ISessionInput | null;
-  isLoggedIn: () => boolean;
+  isAuthenticated: () => boolean;
   getAccessToken: () => string | null;
   getRefreshToken: () => string | null;
   getSession: () => ISessionInput | null;
@@ -29,7 +29,7 @@ export const useSessionStore = create<ISessionState>()(
       (set, get) => ({
         ...initialState,
 
-        isLoggedIn: () => !!get().session,
+        isAuthenticated: () => get().session?.accessToken !== null && get().session?.refreshToken !== null,
         getAccessToken: () => get().session?.accessToken ?? null,
         getRefreshToken: () => get().session?.refreshToken ?? null,
         getSession: () => get().session,

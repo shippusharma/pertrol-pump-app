@@ -3,6 +3,7 @@ import { EGenderType, ERoleType } from '../../types/enums';
 import type { IAwsFileSchema } from '../index';
 
 export interface IUserInput {
+  comparePassword(password: string): boolean;
   isActivated: boolean;
   activatedAt?: Date;
   isEmailVerified: boolean;

@@ -1,6 +1,8 @@
 import { IUserInput } from '@/model/types/user';
+import { sessionStorage } from '@/services/session-storage';
 import { useUserStore } from '@/store/user.store';
 import { IPayloadWithTokensResponse } from '@/types';
+import { EMAIL_REGEX, PASSWORD_REGEX } from '@/utils/regex-patterns';
 import { Link, router } from 'expo-router';
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -28,25 +30,24 @@ export default function LoginScreen() {
         '/auth/login',
         data
       );
-      const { status, message, success, payload } = response;
+      const { status, success, accessToken, refreshToken, payload } = response;
 
       if (success && status === 200) {
         setUser(payload);
+        await sessionStorage.setAuth(accessToken, refreshToken); // Store tokens in secure storage
         return router.replace('/(tabs)');
-      } else {
-        Alert.alert('Login Failed', message);
       }
     } catch (error: any) {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
-        Alert.alert('Login Failed', error.response.data.message || 'An error occurred during login');
+        return Alert.alert('Login Failed', error.response.data.message || 'An error occurred during login');
       } else if (error.request) {
         // The request was made but no response was received
-        Alert.alert('Login Failed', 'No response from server. Please check your network.');
+        return Alert.alert('Login Failed', 'No response from server. Please check your network.');
       } else {
         // Something happened in setting up the request that triggered an Error
-        Alert.alert('Login Failed', error.message || 'An error occurred during login');
+        return Alert.alert('Login Failed', error.message || 'An error occurred during login');
       }
     } finally {
       setIsLoading(false);
@@ -67,7 +68,7 @@ export default function LoginScreen() {
             rules={{
               required: 'Email is required',
               pattern: {
-                value: /^\S+@\S+$/i,
+                value: EMAIL_REGEX,
                 message: 'Please enter a valid email address',
               },
             }}
@@ -92,8 +93,12 @@ export default function LoginScreen() {
             rules={{
               required: 'Password is required',
               minLength: {
-                value: 6,
-                message: 'Password must be at least 6 characters',
+                value: 8,
+                message: 'Password must be at least 8 characters',
+              },
+              pattern: {
+                value: PASSWORD_REGEX,
+                message: 'Password must contain at least 1 uppercase, 1 lowercase, 1 number and 1 special character',
               },
             }}
             render={({ field: { onChange, onBlur, value } }) => (

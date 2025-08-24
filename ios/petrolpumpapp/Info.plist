@@ -7,7 +7,7 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
     <key>CFBundleDisplayName</key>
-    <string>petrol-pump-app</string>
+    <string>Petrol Pump</string>
     <key>CFBundleExecutable</key>
     <string>$(EXECUTABLE_NAME)</string>
     <key>CFBundleIdentifier</key>
@@ -27,7 +27,7 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>petrolpumpapp</string>
+          <string>petrol-pump-app</string>
           <string>com.shippugloitel.petrolpumpapp</string>
         </array>
       </dict>

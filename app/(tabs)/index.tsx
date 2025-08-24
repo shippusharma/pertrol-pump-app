@@ -1,10 +1,12 @@
+import { apiInstance } from '@/lib/api.axios-instance';
+import { sessionStorage } from '@/services/session-storage';
+import { useUserStore } from '@/store/user.store';
 import { router } from 'expo-router';
 import { Bell, Calendar, Camera, Clock, CreditCard, Fuel, LogOut, MapPin } from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Button } from '../../components/Button';
 import { Card } from '../../components/Card';
-import { useAuth } from '../../context/AuthContext';
 
 interface DashboardCard {
   title: string;
@@ -15,7 +17,7 @@ interface DashboardCard {
 }
 
 export default function Dashboard() {
-  const { user, logout } = useAuth();
+  const { getUser, reset } = useUserStore();
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -25,6 +27,17 @@ export default function Dashboard() {
 
     return () => clearInterval(timer);
   }, []);
+
+  const logout = async () => {
+    try {
+      const refreshToken = await sessionStorage.getRefreshToken();
+      await apiInstance.post('/auth/logout', { authorization: `Bearer ${refreshToken}` });
+    } finally {
+      reset();
+      await sessionStorage.deleteAuth();
+      router.replace('/login');
+    }
+  };
 
   const handleLogout = () => {
     Alert.alert('Logout', 'Are you sure you want to logout?', [
@@ -71,7 +84,7 @@ export default function Dashboard() {
         <View style={styles.headerContent}>
           <View>
             <Text style={styles.greeting}>Good {getGreeting()}</Text>
-            <Text style={styles.userName}>{user?.name || 'User'}</Text>
+            <Text style={styles.userName}>{getUser()?.name || 'User'}</Text>
             <View style={styles.timeContainer}>
               <Clock size={16} color="#64748B" />
               <Text style={styles.currentTime}>

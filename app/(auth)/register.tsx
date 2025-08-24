@@ -1,3 +1,10 @@
+import { apiInstance } from '@/lib/api.axios-instance';
+import { IUserInput } from '@/model/types/user';
+import { sessionStorage } from '@/services/session-storage';
+import { useUserStore } from '@/store/user.store';
+import { IPayloadWithTokensResponse } from '@/types';
+import { ERoleType } from '@/types/enums';
+import { EMAIL_REGEX, PASSWORD_REGEX, PHONE_REGEX } from '@/utils/regex-patterns';
 import { Link, router } from 'expo-router';
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -5,34 +12,53 @@ import { Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, Vi
 import { Button } from '../../components/Button';
 import { Card } from '../../components/Card';
 import { Input } from '../../components/Input';
-import { useAuth } from '../../context/AuthContext';
 import { RegisterRequest } from '../../types/auth';
 
 export default function RegisterScreen() {
-  const { register: registerUser, isLoading } = useAuth();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { setUser } = useUserStore();
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     control,
     handleSubmit,
     formState: { errors },
     watch,
-  } = useForm<RegisterRequest & { confirmPassword: string }>({
+  } = useForm<RegisterRequest>({
     defaultValues: { name: '', email: '', phoneNumber: '', password: '', confirmPassword: '' },
   });
+  const password = watch('password'); // Watch password field to validate confirmPassword
 
-  const password = watch('password');
-
-  const onSubmit = async (data: RegisterRequest & { confirmPassword: string }) => {
+  const onSubmit = async (data: RegisterRequest) => {
+    const { confirmPassword, ...registerData } = data;
     try {
-      setIsSubmitting(true);
-      const { confirmPassword, ...registerData } = data;
-      await registerUser(registerData);
-      router.replace('/(tabs)');
+      setIsLoading(true);
+      const response = await apiInstance.post<IPayloadWithTokensResponse<Omit<IUserInput, 'password'>>>(
+        '/auth/register',
+        { ...registerData, role: ERoleType.USER }
+      );
+      const { status, success, accessToken, refreshToken, payload } = response;
+      if (success && status === 201) {
+        setUser(payload);
+        await sessionStorage.setAuth(accessToken, refreshToken); // Store tokens in secure storage
+        return router.replace('/(tabs)');
+      }
     } catch (error: any) {
-      Alert.alert('Registration Failed', error.message || 'An error occurred during registration');
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        return Alert.alert(
+          'Registration Failed',
+          error.response.data.message || 'An error occurred during registration'
+        );
+      } else if (error.request) {
+        // The request was made but no response was received
+        return Alert.alert('Registration Failed', 'No response from server. Please check your network.');
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        return Alert.alert('Registration Failed', error.message || 'An error occurred during registration');
+      }
     } finally {
-      setIsSubmitting(false);
+      setIsLoading(false);
     }
   };
 
@@ -73,7 +99,7 @@ export default function RegisterScreen() {
             rules={{
               required: 'Email is required',
               pattern: {
-                value: /^\S+@\S+$/i,
+                value: EMAIL_REGEX,
                 message: 'Please enter a valid email address',
               },
             }}
@@ -98,7 +124,7 @@ export default function RegisterScreen() {
             rules={{
               required: 'Phone number is required',
               pattern: {
-                value: /^\+?[\d\s-()]+$/,
+                value: PHONE_REGEX,
                 message: 'Please enter a valid phone number',
               },
             }}
@@ -122,8 +148,12 @@ export default function RegisterScreen() {
             rules={{
               required: 'Password is required',
               minLength: {
-                value: 6,
-                message: 'Password must be at least 6 characters',
+                value: 8,
+                message: 'Password must be at least 8 characters',
+              },
+              pattern: {
+                value: PASSWORD_REGEX,
+                message: 'Password must contain at least 1 uppercase, 1 lowercase, 1 number and 1 special character',
               },
             }}
             render={({ field: { onChange, onBlur, value } }) => (
@@ -165,7 +195,7 @@ export default function RegisterScreen() {
           <Button
             title="Create Account"
             onPress={handleSubmit(onSubmit)}
-            loading={isSubmitting || isLoading}
+            loading={isLoading}
             style={styles.registerButton}
           />
         </Card>

@@ -1,12 +1,11 @@
 import { connectToDatabase } from '@/configs';
 import { CoreController } from '@/core';
-import { convertIntoHash } from '@/lib/hashing';
 import type { IUserSchema } from '@/model/types/user';
 import { UserModel } from '@/model/user.mode';
 import { errorResponse, internalErrorResponse, sendResponse } from '@/utils/response-handlers';
 import { removeKeysFromPayload } from '@/utils/validate.utils';
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request, _res: Response) {
   try {
     const { role, name, email, phoneNumber, password } = await req.json();
     if (!role) return errorResponse(400, 'Role is required.');
@@ -19,8 +18,7 @@ export async function POST(req: Request, res: Response) {
     const oldUser = await UserModel.findOne({ $or: [{ email }, { phoneNumber }] }).exec();
     if (oldUser) return errorResponse(400, 'Email or phone number already available.');
 
-    const hashPassword = convertIntoHash(password);
-    const payload = await UserModel.create({ role, name, email, phoneNumber, password: hashPassword });
+    const payload = await UserModel.create({ role, name, email, phoneNumber, password });
     if (!payload) return errorResponse(400, `Registertation is failed.`);
 
     const coreController = new CoreController<IUserSchema>(UserModel);

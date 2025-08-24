@@ -24,7 +24,7 @@ export const useUserStore = create<IUserState>()(
       (set, get) => ({
         ...initialState,
 
-        isLoggedIn: () => !!get().user,
+        isLoggedIn: () => get().user !== null,
         getUser: () => get().user,
         setUser: user => set({ user }),
         updateUser: updates =>
