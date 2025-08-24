@@ -2,6 +2,31 @@
   "name": "petrol-pump-app",
   "main": "expo-router/entry",
   "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "keywords": [
+    "pertrol-pump-app",
+    "pertrol-pump",
+    "pertrol-pump-management"
+  ],
+  "author": {
+    "name": "Shippu Sharma",
+    "email": "shippusharma00@gmail.com",
+    "url": "https://github.com/shippusharma"
+  },
+  "contributors": [
+    "Shippu Sharma <shippusharma00@gmail.com> (https://github.com/shippusharma)",
+    "Shippu Gloitel <shippu.sharma@gloitel.in> (https://github.com/shippu-gloitel)"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shippusharma/pertrol-pump-app.git"
+  },
+  "homepage": "https://github.com/shippusharma/pertrol-pump-app#readme",
+  "bugs": {
+    "url": "https://github.com/shippusharma/pertrol-pump-app/issues"
+  },
+  "license": "MIT",
   "scripts": {
     "dev": "EXPO_NO_TELEMETRY=1 expo start",
     "start": "expo start",
@@ -95,6 +120,5 @@
     "prettier": "^3.6.2",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.39.0"
-  },
-  "private": true
+  }
 }

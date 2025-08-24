@@ -2,6 +2,7 @@ import { serverWithApiVersion } from '@/configs/env';
 import { sessionStorage } from '@/services/session-storage';
 import axios, { type AxiosError, type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios';
 import { router } from 'expo-router';
+import { getApiBaseUrl } from './ip';
 
 interface InternalAxiosRequestConfig extends AxiosRequestConfig {
   _retry?: boolean;
@@ -283,7 +284,7 @@ export class ApiInstance {
   }
 }
 
-export const apiInstance = new ApiInstance(serverWithApiVersion);
+export const apiInstance = new ApiInstance(getApiBaseUrl() || serverWithApiVersion);
 
 /**
 //! Cleanup function to abort the request when the component unmounts
